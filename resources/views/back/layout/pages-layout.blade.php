@@ -430,9 +430,9 @@
 		<div class="left-side-bar">
 			<div class="brand-logo">
 				<a href="index.html">
-					<img src="{{ asset('back/vendors/images/deskapp-logo.svg') }}" alt="" class="dark-logo" />
+					<img src="{{ asset('back/vendors/images/PR-3.png') }}" alt="" class="dark-logo" />
 					<img
-						src="{{ asset('back/vendors/images/deskapp-logo-white.svg') }}"
+						src="{{ asset('back/vendors/images/PR-3.png') }}"
 						alt=""
 						class="light-logo"
 					/>

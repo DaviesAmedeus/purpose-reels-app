@@ -29,7 +29,7 @@
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <div class="brand-logo">
                 <a href="login.html">
-                    <img src="{{ asset('back/vendors/images/deskapp-logo.svg') }}" alt="" />
+                    <img src="{{ asset('back/vendors/images/PR-3.png') }}" alt="" />
                 </a>
             </div>
             <div class="login-menu">
