@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    public function adminDashboard(Request $request){
+    public function adminDashboard(Request $request)
+    {
 
         $data = [
             'pageTitle' => 'Dashboard'
@@ -16,13 +17,21 @@ class AdminController extends Controller
         return view('back.pages.dashboard', $data);
     }
 
-    public function logoutHandler(Request $request){
+    public function logoutHandler(Request $request)
+    {
 
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('admin.login')->with('fail', 'You are now logged out!');
+    }
 
+    public function profileView()
+    {
+        $data = [
+            'pageTitle' => 'Profile'
+        ];
 
+        return view('back.pages.profile', $data);
     }
 }

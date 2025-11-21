@@ -57,4 +57,8 @@ class User extends Authenticatable
         ];
     }
 
+    public function getPictureAttribute($value){
+        return $value ?asset('images/users/'.$value) : asset('images/users/default-avatar.jpg');
+    }
+
 }

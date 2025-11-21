@@ -72,6 +72,8 @@
                         <a href="{{$actionLink}}" target="_blank" class="btn">Reset password</a>
                       </p>
 
+                      <p>This link is valid for 15 minutes</p>
+
 
 
                       <hr style="border:none;border-top:1px solid #e6e9ee;margin:20px 0;">
