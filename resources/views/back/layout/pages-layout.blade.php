@@ -5,6 +5,8 @@
     <!-- Basic Page Info -->
     <meta charset="utf-8" />
     <title>@yield('pageTitle')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('back/vendors/images/apple-touch-icon.png') }}" />
@@ -22,6 +24,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('back/vendors/styles/icon-font.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('extra-assets/ijabo/css/ijabo.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('back/vendors/styles/style.css') }}" />
+    @kropifyStyles
     @stack('stylesheets')
 </head>
 
@@ -366,6 +369,7 @@
     <script src="{{ asset('back/vendors/scripts/process.js') }}"></script>
     <script src="{{ asset('back/vendors/scripts/layout-settings.js') }}"></script>
     <script src="{{ asset('extra-assets/ijabo/js/ijabo.min.js') }}"></script>
+    @kropifyScripts
     <script>
         window.addEventListener('showToastr', function(event) {
             $().notifa({

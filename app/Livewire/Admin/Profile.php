@@ -13,6 +13,11 @@ class Profile extends Component
 
     public $name, $email, $username, $bio;
 
+    protected $listeners = [
+        'updateProfile' => 'refresh'
+    ];
+
+
 
     public function selectTab($tab)
     {
@@ -47,11 +52,11 @@ class Profile extends Component
 
         sleep(0.5);
 
-        if($updated){
-            $this->dispatch('showToastr', ['type'=>'success', 'message'=>'Your personal details have been updated successfully']);
+        if ($updated) {
+            $this->dispatch('showToastr', ['type' => 'success', 'message' => 'Your personal details have been updated successfully']);
             $this->dispatch('updateTopUserInfo')->to(TopUserInfo::class);
-        }else{
-            $this->dispatch('showToastr', ['type'=>'error', 'message'=>'Ofcourse something went wrong!']);
+        } else {
+            $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Ofcourse something went wrong!']);
         }
     }
 

@@ -21,4 +21,47 @@
         </div>
     </div>
     @livewire('admin.profile')
+    @push('scripts')
+        <script>
+            const cropper = new Kropify('input[type="file"][id="profilePictureFile"]', {
+                aspectRatio: 1,
+                viewMode: 1,
+                preview: 'image#profilePicturePreview',
+                processURL: '{{ route("admin.update_profile_picture") }}', // or processURL:'/crop'
+                maxSize: 2 * 1024 * 1024, // 2MB
+                allowedExtensions: ['jpg', 'jpeg', 'png'],
+                showLoader: true,
+                animationClass: 'pulse',
+                // fileName: 'avatar', // leave this commented if you want it to default to the input name
+                cancelButtonText: 'Cancel',
+                resetButtonText: 'Reset',
+                cropButtonText: 'Crop & Upload',
+                maxWoH: 500,
+                onError: function(msg) {
+                    alert(msg);
+                    // toastr.error(msg);
+                },
+                onDone: function(data) {
+                    if (data.status == 1) {
+                        Livewire.dispatch('updateTopUserInfo',[]);
+                        Livewire.dispatch('updateProfile',[]);
+                        $().notifa({
+                            vers: 2,
+                            cssClass: 'success',
+                            html: data.message,
+                            delay: 2500
+                        });
+                    }else{
+                        $().notifa({
+                            vers: 2,
+                            cssClass: 'error',
+                            html: data.message,
+                            delay: 2500
+                        });
+                    }
+
+                }
+            });
+        </script>
+    @endpush
 @endsection
