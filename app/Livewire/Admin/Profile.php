@@ -3,7 +3,10 @@
 namespace App\Livewire\Admin;
 
 use App\Models\User;
+use App\Helpers\CMail;
 use Livewire\Component;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class Profile extends Component
 {
@@ -11,7 +14,9 @@ class Profile extends Component
     public $tabname = 'personal_details';
     protected  $queryString = ['tab' => ['keep' => true]];
 
-    public $name, $email, $username, $bio;
+    public $name, $email, $username, $bio; //Personal details properties
+
+    public $current_password, $new_password, $new_password_confirmation; // Update password properties
 
     protected $listeners = [
         'updateProfile' => 'refresh'
@@ -58,6 +63,53 @@ class Profile extends Component
         } else {
             $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Ofcourse something went wrong!']);
         }
+    }
+
+
+    public function updatePassword()
+    {
+        $user = User::findOrfail(auth()->id());
+
+        $this->validate([
+            'current_password' => ['required', 'min:6', function ($attribute, $value, $fail) use ($user) {
+                if (!Hash::check($value, $user->password)) {
+                    return $fail(__('Your current password does not match our records'));
+                }
+            }],
+
+            'new_password'=> 'required|min:5|confirmed'
+        ]);
+
+        // Update the user password
+        $updated = $user->update(['password'=> Hash::make($this->new_password)]);
+
+        if($updated){
+            // send email to this user
+            $data = array(
+                'user'=> $user,
+                'new_password'=>$this->new_password
+            );
+
+            $mail_body = view('email-templates.password-changes-template', $data)->render();
+
+            $mail_config = array(
+                'recipient_address'=> $user->email,
+                'recipient_name'=> $user->name,
+                'subject'=> 'Password Changed',
+                'body'=> $mail_body
+            );
+
+            CMail::send($mail_config);
+
+            // Logout and redirect the user to login page
+            auth()->logout();
+            Session::flash('info', 'Your passoword has been successfully changed. Please login with  your new password!');
+            $this->redirectRoute('admin.login');
+
+        }else{
+            $this->dispatch('showToastr',['type'=>'error', 'message'=>'Something went wrong!']);
+        }
+
     }
 
 
