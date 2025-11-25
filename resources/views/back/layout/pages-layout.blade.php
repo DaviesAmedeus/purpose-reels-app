@@ -29,7 +29,7 @@
 </head>
 
 <body>
-    <div class="pre-loader">
+    {{-- <div class="pre-loader">
         <div class="pre-loader-box">
             <div class="loader-logo">
                 <img src="{{ asset('back/vendors/images/PR-1.svg') }}" alt="" />
@@ -40,7 +40,7 @@
             <div class="percent" id="percent1">0%</div>
             <div class="loading-text text-danger">Loading...</div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="header">
         <div class="header-left">
