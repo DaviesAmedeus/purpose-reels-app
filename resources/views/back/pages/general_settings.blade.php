@@ -25,4 +25,73 @@
     <div class="pd-20 card-box mb-4">
         @livewire('admin.settings')
     </div>
+
+    @push('scripts')
+
+    <script>
+        $('input[type="file"][name="site_logo"]').ijaboViewer({
+            preview: '#preview_site_logo',
+            imageShape: 'rectangular',
+            allowedExtensions: ['png', 'jpg'],
+            onErrorShape: function(message, element){
+                alert(message)
+            },
+            onInvalidType: function(message, element){
+                alert(message);
+            },
+            onSuccess: function(message,element){
+
+            }
+        });
+
+        // Submiting a for using AJAX
+        $('#updateLogoForm').submit(function(e){
+            e.preventDefault();
+            var form = this;
+            var inputVal = $(form).find('input[type="file"]').val();
+            var errorElement = $(form).find('span.text-danger');
+            errorElement.text('');
+
+            if(inputVal.length > 0){
+                $.ajax({
+                    url: $(form).attr('action'),
+                    method: $(form).attr('method',
+                    data: new FormData(form),
+                    processData: false,
+                    dataType: 'json',
+                    contentType: false,
+                    beforeSend: function(){},
+                    success: function(data){
+                        if(data.status == 1){
+                            $(form)[0].reset();
+                            $().notifa({
+                                vers: 2,
+                                cssClass: 'success',
+                                html: data.message,
+                                delay: 3000
+                            });
+                            $('img.site_logo').each(function(){
+                                $(this).attr('src','/'+data.image_path);
+                            });
+                        }else{
+                             $().notifa({
+                                vers: 2,
+                                cssClass: 'error ',
+                                html: data.message,
+                                delay: 3000
+                            });
+                        }
+                    }
+                    )
+                });
+
+            }else{
+                errorElement.text('Please select an image file');
+            }
+
+
+        });
+    </script>
+
+    @endpush
 @endsection

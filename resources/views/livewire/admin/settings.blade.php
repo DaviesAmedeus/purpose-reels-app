@@ -64,7 +64,8 @@
                         </div>
                         <div class="form-group">
                             <label for=""><b>Site Meta Description</b><small>(optional)</small></label>
-                            <textarea class="form-control" wire:model="site_meta_description" id="" cols="4" rows="4" placeholder="Type site meta description..."></textarea>
+                            <textarea class="form-control" wire:model="site_meta_description" id="" cols="4" rows="4"
+                                placeholder="Type site meta description..."></textarea>
                             @error('site_meta_description')
                                 <span class="text-danger ml-1">{{ $message }}</span>
                             @enderror
@@ -75,9 +76,27 @@
                 </div>
             </div>
 
-            <div class="tab-pane fade {{ $tab == 'logo_favicon' ? 'active' : '' }}" id="logo_favicon" role="tabpanel">
+            <div class="tab-pane fade {{ $tab == 'logo_favicon' ? 'active show' : '' }}" id="logo_favicon"
+                role="tabpanel">
                 <div class="pd-20">
-                    --- Logo & Favicon ---
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Site logo</h6>
+                            <div class="mb-2 mt-1" style="max-width: 200px">
+                                <img wire:ignore src="" alt="" class="img-thumbnail"
+                                    data-ijabo-default-img="" id="preview_site_logo">
+                            </div>
+                            <form action="{{ route('admin.update_logo') }}" method="post" enctype="multipart/form-data"
+                                id="updateLogoForm">
+                                @csrf
+                                <div class="pb-5">
+                                    <input type="file" name="site_logo" id="" class="form-control">
+                                    <span class="text-danger ml-1"></span>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Change logo</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
