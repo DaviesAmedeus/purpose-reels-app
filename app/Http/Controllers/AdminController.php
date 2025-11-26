@@ -38,42 +38,6 @@ class AdminController extends Controller
         return view('back.pages.profile', $data);
     }
 
-
-
-    //     public function updateProfilePicture(Request $request)
-    // {
-
-    //     $user = User::findOrFail(auth()->id());
-    //      $path = 'images/users/';
-    //     $file = $request->file('profilePictureFile');
-    //     $old_picture = $user->picture ?? null;
-    //     $filename = 'IMG_' . uniqid() . '.png';
-
-    //     // Save to public/images/users/
-    //     // $upload = Kropify::getFile($file, $filename)->save($path);
-
-    //  $upload = Kropify::getFile($file, $filename)
-    //             ->setPath('images/users')   // relative to /public
-    //             ->useMove()                 // required to move into public/
-    //             ->save();
-
-    //     if ($upload) {
-
-    //         // Delete old picture
-    //         if ($old_picture && File::exists(public_path('images/users/' . $old_picture))) {
-    //             File::delete(public_path('images/users/' . $old_picture));
-    //         }
-
-    //         // Update DB
-    //         $user->update(['picture' => $filename]);
-
-    //         return response()->json(['status' => 1, 'message' => 'Your profile picture has been updated successfully']);
-    //     }
-
-    //     return response()->json(['status' => 0, 'message' => 'Something went wrong!']);
-    // }
-
-
     public function updateprofilePicture(Request $request)
     {
 
@@ -107,4 +71,15 @@ class AdminController extends Controller
 
         return response()->json(['status' => 0, 'message' => 'Something went wrong!']);
     }
+
+
+    public function generalSettings(Request $request){
+        $data = [
+            'pageTitle'=> 'General settings'
+        ];
+
+        return view('back.pages.general_settings', $data);
+    }
+
+
 }

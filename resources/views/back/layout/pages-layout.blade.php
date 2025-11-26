@@ -333,8 +333,10 @@
                         </a>
                     </li>
 
+
+
                     <li>
-                        <a class="dropdown-toggle no-cogs"></span>
+                        <a class="dropdown-toggle no-arrow" href="{{ route('admin.settings') }}"></span>
                             <span class="micon fa fa-cogs"></span>
                             <span class="mtext">General
                             </span>
