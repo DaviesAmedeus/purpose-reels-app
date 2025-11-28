@@ -55,7 +55,7 @@
             if(inputVal.length > 0){
                 $.ajax({
                     url: $(form).attr('action'),
-                    method: $(form).attr('method',
+                    method: $(form).attr('method'),
                     data: new FormData(form),
                     processData: false,
                     dataType: 'json',
@@ -74,24 +74,33 @@
                                 $(this).attr('src','/'+data.image_path);
                             });
                         }else{
-                             $().notifa({
+                            $().notifa({
                                 vers: 2,
-                                cssClass: 'error ',
+                                cssClass: 'error',
                                 html: data.message,
                                 delay: 3000
                             });
                         }
                     }
-                    )
+
                 });
 
-            }else{
+            } else{
                 errorElement.text('Please select an image file');
             }
 
-
         });
+
+
+
+
+
+
+
+
     </script>
+
+
 
     @endpush
 @endsection

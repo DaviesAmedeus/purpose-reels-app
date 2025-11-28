@@ -84,7 +84,7 @@
                             <h6>Site logo</h6>
                             <div class="mb-2 mt-1" style="max-width: 200px">
                                 <img wire:ignore src="" alt="" class="img-thumbnail"
-                                    data-ijabo-default-img="" id="preview_site_logo">
+                                    data-ijabo-default-img="/images/site/{{ isset(settings()->site_logo)? settings()->site_logo : '' }}" id="preview_site_logo">
                             </div>
                             <form action="{{ route('admin.update_logo') }}" method="post" enctype="multipart/form-data"
                                 id="updateLogoForm">
