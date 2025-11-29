@@ -27,80 +27,135 @@
     </div>
 
     @push('scripts')
+        <script>
+            // Preview the site logo before update
+            $('input[type="file"][name="site_logo"]').ijaboViewer({
+                preview: '#preview_site_logo',
+                imageShape: 'rectangular',
+                allowedExtensions: ['png', 'jpg'],
+                onErrorShape: function(message, element) {
+                    alert(message)
+                },
+                onInvalidType: function(message, element) {
+                    alert(message);
+                },
+                onSuccess: function(message, element) {
 
-    <script>
-        $('input[type="file"][name="site_logo"]').ijaboViewer({
-            preview: '#preview_site_logo',
-            imageShape: 'rectangular',
-            allowedExtensions: ['png', 'jpg'],
-            onErrorShape: function(message, element){
-                alert(message)
-            },
-            onInvalidType: function(message, element){
-                alert(message);
-            },
-            onSuccess: function(message,element){
+                }
+            });
 
-            }
-        });
+            // Submiting update Logo Form using AJAX
+            $('#updateLogoForm').submit(function(e) {
+                e.preventDefault();
+                var form = this;
+                var inputVal = $(form).find('input[type="file"]').val();
+                var errorElement = $(form).find('span.text-danger');
+                errorElement.text('');
 
-        // Submiting a for using AJAX
-        $('#updateLogoForm').submit(function(e){
-            e.preventDefault();
-            var form = this;
-            var inputVal = $(form).find('input[type="file"]').val();
-            var errorElement = $(form).find('span.text-danger');
-            errorElement.text('');
-
-            if(inputVal.length > 0){
-                $.ajax({
-                    url: $(form).attr('action'),
-                    method: $(form).attr('method'),
-                    data: new FormData(form),
-                    processData: false,
-                    dataType: 'json',
-                    contentType: false,
-                    beforeSend: function(){},
-                    success: function(data){
-                        if(data.status == 1){
-                            $(form)[0].reset();
-                            $().notifa({
-                                vers: 2,
-                                cssClass: 'success',
-                                html: data.message,
-                                delay: 3000
-                            });
-                            $('img.site_logo').each(function(){
-                                $(this).attr('src','/'+data.image_path);
-                            });
-                        }else{
-                            $().notifa({
-                                vers: 2,
-                                cssClass: 'error',
-                                html: data.message,
-                                delay: 3000
-                            });
+                if (inputVal.length > 0) {
+                    $.ajax({
+                        url: $(form).attr('action'),
+                        method: $(form).attr('method'),
+                        data: new FormData(form),
+                        processData: false,
+                        dataType: 'json',
+                        contentType: false,
+                        beforeSend: function() {},
+                        success: function(data) {
+                            if (data.status == 1) {
+                                $(form)[0].reset();
+                                $().notifa({
+                                    vers: 2,
+                                    cssClass: 'success',
+                                    html: data.message,
+                                    delay: 3000
+                                });
+                                $('img.site_logo').each(function() {
+                                    $(this).attr('src', '/' + data.image_path);
+                                });
+                            } else {
+                                $().notifa({
+                                    vers: 2,
+                                    cssClass: 'error',
+                                    html: data.message,
+                                    delay: 3000
+                                });
+                            }
                         }
-                    }
 
-                });
+                    });
 
-            } else{
-                errorElement.text('Please select an image file');
-            }
+                } else {
+                    errorElement.text('Please select an image file');
+                }
 
-        });
-
+            });
 
 
 
+            // Preview the site favicon before update
+            $('input[type="file"][name="site_favicon"]').ijaboViewer({
+                preview: 'img#preview_site_favicon',
+                imageShape: 'square',
+                allowedExtensions: ['png', 'ico'],
+                onErrorShape: function(message, element) {
+                    alert(message);
+                },
+                onInvalidType: function(message, element) {
+                    alert(message);
+                },
+                onSuccess: function(message, element) {}
+
+            });
 
 
+            // Submiting update Favicon Form using AJAX
+                 $('#updateFaviconForm').submit(function(e) {
+                e.preventDefault();
+                var form = this;
+                var inputVal = $(form).find('input[type="file"]').val();
+                var errorElement = $(form).find('span.text-danger');
+                errorElement.text('');
 
+                if (inputVal.length > 0) {
+                    $.ajax({
+                        url: $(form).attr('action'),
+                        method: $(form).attr('method'),
+                        data: new FormData(form),
+                        processData: false,
+                        dataType: 'json',
+                        contentType: false,
+                        beforeSend: function() {},
+                        success: function(data) {
+                            if (data.status == 1) {
+                                $(form)[0].reset();
+                                var linkElement = document.querySelector('link[rel="icon"]');
+                                linkElement.href='/'+data.image_path;
+                                $().notifa({
+                                    vers: 2,
+                                    cssClass: 'success',
+                                    html: data.message,
+                                    delay: 2700
+                                });
 
-    </script>
+                            } else {
+                                $().notifa({
+                                    vers: 2,
+                                    cssClass: 'error',
+                                    html: data.message,
+                                    delay: 2700
+                                });
+                            }
+                        }
 
+                    });
 
+                } else {
+                    errorElement.text('Please select an image file');
+                }
 
+            });
+
+        </script>
     @endpush
 @endsection
