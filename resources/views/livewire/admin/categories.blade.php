@@ -21,29 +21,30 @@
                             <th>Actions</th>
                         </thead>
 
-                        <tbody>
+                        <tbody id="sortable_parent_categories">
                             @forelse ($pcategories as  $item)
-<tr>
-                                <td>{{ $item->id }}</td>
-                                <td>{{ $item->name }}</td>
-                                <td>-</td>
-                                <td>
-                                    <div class="table-actions">
-                                        <a href="javascript:;" wire:click="editParentCategory({{ $item->id }})" class="text-primary mx-2">
-                                            <i class="dw dw-edit2"></i>
-                                        </a>
-                                        <a class="text-danger mx-2">
-                                            <i class="dw dw-delete-3"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                                <tr data-index="{{ $item->id }}" data-ordering="{{ $item->ordering }}">
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>-</td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <a href="javascript:;" wire:click="editParentCategory({{ $item->id }})"
+                                                class="text-primary mx-2">
+                                                <i class="dw dw-edit2"></i>
+                                            </a>
+                                            <a class="text-danger mx-2">
+                                                <i class="dw dw-delete-3"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td colspan="4">
-                                    <span class="text-danger">No Item found</span>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <span class="text-danger">No Item found</span>
+                                    </td>
+                                </tr>
                             @endforelse
 
                         </tbody>
@@ -102,13 +103,14 @@
 
     {{-- MODALS --}}
 
-    <div wire:ignore.self class="modal fade" id="pcategory_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div wire:ignore.self class="modal fade" id="pcategory_modal" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
-            <form class="modal-content" wire:submit="{{  $isUpdateParentCategoryMode ? 'updateParentCategory()' : 'createParentCategory()' }}">
+            <form class="modal-content"
+                wire:submit="{{ $isUpdateParentCategoryMode ? 'updateParentCategory()' : 'createParentCategory()' }}">
                 <div class="modal-header">
                     <h4 class="modal-title" id="myLargeModalLabel">
-                {{ $isUpdateParentCategoryMode ? 'Update P. category' : 'Add P. category' }}
+                        {{ $isUpdateParentCategoryMode ? 'Update P. category' : 'Add P. category' }}
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         ×
@@ -120,7 +122,8 @@
                     @endif
                     <div class="form-group">
                         <label for=""><b>Parent category name</b></label>
-                        <input type="text" class="form-control" wire:model="pcategory_name" placeholder="Enter the parent category name here....">
+                        <input type="text" class="form-control" wire:model="pcategory_name"
+                            placeholder="Enter the parent category name here....">
                         @error('pcategory_name')
                             <span class="text-danger ml-1">{{ $message }}</span>
                         @enderror
