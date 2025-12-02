@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Category;
 use App\Models\ParentCategory;
 use Livewire\Component;
 
@@ -10,6 +11,9 @@ class Categories extends Component
 
     public $isUpdateParentCategoryMode = false;
     public $pcategory_id, $pcategory_name;
+
+    public  $isUpdateCategoryMode = false;
+    public $category_id, $parent = 0, $category_name;
 
     protected $listeners = [
         'updateCategoryOrdering',
@@ -75,11 +79,7 @@ class Categories extends Component
 
     }
 
-    public function showParentCategoryModalForm()
-    {
-        $this->resetErrorBag();
-        $this->dispatch('showParentCategoryModalForm');
-    }
+
     public function editParentCategory($id)
     {
         $pcategory = ParentCategory::findOrFail($id);
@@ -112,11 +112,63 @@ class Categories extends Component
         }
     }
 
+    public function addCategory(){
+        $this->category_id = null;
+        $this->parent =0;
+        $this->category_name = null;
+        $this->isUpdateCategoryMode = false;
+        $this->showCategoryModalForm();
+
+    }
+
+    public function createCategory(){
+          $this->validate([
+            'category_name' => 'required|unique:categories,name'
+        ], [
+            'category_name.required' => 'Category field is required!',
+            'category_name.unique' => 'Category name already exists'
+        ]);
+
+        // Store new category
+        $category = new Category();
+        $category->parent = $this->parent;
+        $category->name = $this->category_name;
+        $saved = $category->save();
+
+        if($saved){
+            $this->hideCategoryModalForm();
+            $this->dispatch('showToastr',['type'=>'success', 'message'=>'New Category created successfully!']);
+
+        }else{
+            $this->dispatch('showToastr',['type'=>'error', 'message'=>'Something went wrong!']);
+        }
+
+    }
+
+      public function showParentCategoryModalForm()
+    {
+        $this->resetErrorBag();
+        $this->dispatch('showParentCategoryModalForm');
+    }
+
     public function hideParentCategoryModalForm()
     {
         $this->dispatch('hideParentCategoryModalForm');
         $this->isUpdateParentCategoryMode = false;
         $this->pcategory_id = $this->pcategory_id = null;
+    }
+
+
+    public function showCategoryModalForm(){
+        $this->resetErrorBag();
+        $this->dispatch('showCategoryModalForm');
+    }
+
+    public function hideCategoryModalForm(){
+         $this->dispatch('hideCategoryModalForm');
+         $this->isUpdateCategoryMode = false;
+         $this->category_id = $this->category_name = null;
+         $this->parent =0;
     }
 
     public function render()

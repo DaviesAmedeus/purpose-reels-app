@@ -61,7 +61,7 @@
                         <h4 class="h4 text-blue">Categories</h4>
                     </div>
                     <div class="pull-right">
-                        <a class="btn btn-primary btn-sm text-light">Add category</a>
+                        <a href="javascript:;" wire:click="addCategory()" class="btn btn-primary btn-sm text-light">Add category</a>
                     </div>
                 </div>
 
@@ -140,4 +140,57 @@
             </form>
         </div>
     </div>
+
+<div wire:ignore.self class="modal fade" id="category_modal" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <form class="modal-content"
+                wire:submit="{{ $isUpdateCategoryMode ? 'updateCategory()' : 'createCategory()' }}">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myLargeModalLabel">
+                        {{ $isUpdateCategoryMode ? 'Update Category' : 'Add Category' }}
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        ×
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if ($isUpdateCategoryMode)
+                        <input type="hidden" wire:model="category_id">
+                    @endif
+                    <div class="form-group">
+                        <label for=""><b>Parent category</b>:</label>
+                        <select wire:model="parent"  class="custom-select">
+                            <option value="0">Uncategorized</option>
+                            @foreach ($pcategories as $item )
+                                  <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                         @error('parent')
+                            <span class="text-danger ml-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for=""><b> category name</b></label>
+                        <input type="text" class="form-control" wire:model="category_name"
+                            placeholder="Enter the  category name here....">
+                        @error('category_name')
+                            <span class="text-danger ml-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        {{ $isUpdateCategoryMode ? 'Save changes' : 'Create' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
