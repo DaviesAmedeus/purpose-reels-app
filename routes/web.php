@@ -36,10 +36,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/logout', 'logoutHandler')->name('logout');
             Route::get('/profile', 'profileView')->name('profile');
             Route::post('/update-profile-picture', 'updateProfilePicture')->name('update_profile_picture');
-            Route::get('/settings', 'generalSettings')->name('settings');
-            Route::post('/update-logo', 'updateLogo')->name('update_logo');
-            Route::post('/update-favicon', 'updateFavicon')->name('update_favicon');
-            Route::get('/categories', 'categoriesPage')->name('categories');
+            
+            // To only be accessed only by superAdmin
+            Route::middleware(['onlySuperAdmin'])->group(function () {
+                Route::get('/settings', 'generalSettings')->name('settings');
+                Route::post('/update-logo', 'updateLogo')->name('update_logo');
+                Route::post('/update-favicon', 'updateFavicon')->name('update_favicon');
+                Route::get('/categories', 'categoriesPage')->name('categories');
+            });
         });
     });
 });

@@ -9,7 +9,8 @@
 
 
     <!-- Site favicon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/site/{{ isset(settings()->site_favicon)? settings()->site_favicon : '' }}" />
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}" />
 
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -271,8 +272,10 @@
     <div class="left-side-bar">
         <div class="brand-logo">
             <a href="/">
-                <img src="/images/site/{{ isset(settings()->site_logo)? settings()->site_logo : '' }}" alt="" class="dark-logo site_logo" />
-                <img src="/images/site/{{ isset(settings()->site_logo)? settings()->site_logo : '' }}" alt="" class="light-logo site_logo" />
+                <img src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}"
+                    alt="" class="dark-logo site_logo" />
+                <img src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}"
+                    alt="" class="light-logo site_logo" />
             </a>
             <div class="close-sidebar" data-toggle="left-sidebar-close">
                 <i class="ion-close-round"></i>
@@ -282,15 +285,20 @@
             <div class="sidebar-menu">
                 <ul id="accordion-menu">
                     <li>
-                        <a href="{{ route('admin.dashboard') }}" class="dropdown-toggle no-arrow {{ Route::is('admin.dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="dropdown-toggle no-arrow {{ Route::is('admin.dashboard') ? 'active' : '' }}">
                             <span class="micon fa fa-home"></span><span class="mtext">Home</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('admin.categories') }}" class="dropdown-toggle no-arrow {{ Route::is('admin.categories') ? 'active' : '' }}">
-                            <span class="micon fa fa-th-list"></span><span class="mtext">Categories</span>
-                        </a>
-                    </li>
+                    @if (auth()->user()->type == 'superAdmin')
+                        <li>
+                            <a href="{{ route('admin.categories') }}"
+                                class="dropdown-toggle no-arrow {{ Route::is('admin.categories') ? 'active' : '' }}">
+                                <span class="micon fa fa-th-list"></span><span class="mtext">Categories</span>
+                            </a>
+                        </li>
+                    @endif
+
                     <li class="dropdown">
                         <a href="javascript:;" class="dropdown-toggle">
                             <span class="micon fa fa-newspaper-o"></span><span class="mtext"> Posts </span>
@@ -301,16 +309,18 @@
 
                         </ul>
                     </li>
-                    <li class="dropdown">
-                        <a href="javascript:;" class="dropdown-toggle">
-                            <span class="micon fa fa-shopping-bag"></span><span class="mtext">Shop</span>
-                        </a>
-                        <ul class="submenu">
-                            <li><a href="">New product</a></li>
-                            <li><a href="">All products</a></li>
+                    @if (auth()->user()->type == 'superAdmin')
+                        <li class="dropdown">
+                            <a href="javascript:;" class="dropdown-toggle">
+                                <span class="micon fa fa-shopping-bag"></span><span class="mtext">Shop</span>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="">New product</a></li>
+                                <li><a href="">All products</a></li>
 
-                        </ul>
-                    </li>
+                            </ul>
+                        </li>
+                    @endif
 
 
                     <li>
@@ -326,7 +336,8 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-toggle no-arrow {{ Route::is('admin.profile') ? 'active' : '' }}" href="{{ route('admin.profile') }}">
+                        <a class="dropdown-toggle no-arrow {{ Route::is('admin.profile') ? 'active' : '' }}"
+                            href="{{ route('admin.profile') }}">
                             <span class="micon fa fa-user-circle"></span>
                             <span class="mtext">Profile
                             </span>
@@ -334,14 +345,16 @@
                     </li>
 
 
-
-                    <li>
-                        <a class="dropdown-toggle no-arrow {{ Route::is('admin.settings') ? 'active' : '' }}" href="{{ route('admin.settings') }}"></span>
-                            <span class="micon fa fa-cogs"></span>
-                            <span class="mtext">General
-                            </span>
-                        </a>
-                    </li>
+                    @if (auth()->user()->type == 'superAdmin')
+                        <li>
+                            <a class="dropdown-toggle no-arrow {{ Route::is('admin.settings') ? 'active' : '' }}"
+                                href="{{ route('admin.settings') }}"></span>
+                                <span class="micon fa fa-cogs"></span>
+                                <span class="mtext">General
+                                </span>
+                            </a>
+                        </li>
+                    @endif
 
                 </ul>
             </div>
