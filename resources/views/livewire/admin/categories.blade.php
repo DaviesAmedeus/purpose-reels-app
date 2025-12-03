@@ -26,14 +26,16 @@
                                 <tr data-index="{{ $item->id }}" data-ordering="{{ $item->ordering }}">
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>-</td>
+                                    <td>{{ $item->children->count() }}</td>
                                     <td>
                                         <div class="table-actions">
                                             <a href="javascript:;" wire:click="editParentCategory({{ $item->id }})"
                                                 class="text-primary mx-2">
                                                 <i class="dw dw-edit2"></i>
                                             </a>
-                                            <a href="javascript:;" wire:click="deleteParentCategory({{ $item->id }})" class="text-danger mx-2">
+                                            <a href="javascript:;"
+                                                wire:click="deleteParentCategory({{ $item->id }})"
+                                                class="text-danger mx-2">
                                                 <i class="dw dw-delete-3"></i>
                                             </a>
                                         </div>
@@ -61,7 +63,8 @@
                         <h4 class="h4 text-blue">Categories</h4>
                     </div>
                     <div class="pull-right">
-                        <a href="javascript:;" wire:click="addCategory()" class="btn btn-primary btn-sm text-light">Add category</a>
+                        <a href="javascript:;" wire:click="addCategory()" class="btn btn-primary btn-sm text-light">Add
+                            category</a>
                     </div>
                 </div>
 
@@ -76,23 +79,32 @@
                         </thead>
 
                         <tbody>
+                            @forelse ($categories as $item)
+                                <tr>
+                                    <td>{{ $item->id  }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ !is_null($item->parent_category) ? $item->parent_category->name : '-' }}</td>
+                                    <td>4</td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <a class="text-primary mx-2">
+                                                <i class="dw dw-edit2"></i>
+                                            </a>
+                                            <a class="text-danger mx-2">
+                                                <i class="dw dw-delete-3"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5">
+                                        <span class="text-danger">No Item found</span>
+                                    </td>
+                                </tr>
+                            @endforelse
 
-                            <tr>
-                                <td>1</td>
-                                <td>P. Cat 1</td>
-                                <td>Any</td>
-                                <td>4</td>
-                                <td>
-                                    <div class="table-actions">
-                                        <a class="text-primary mx-2">
-                                            <i class="dw dw-edit2"></i>
-                                        </a>
-                                        <a class="text-danger mx-2">
-                                            <i class="dw dw-delete-3"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+
                         </tbody>
                     </table>
                 </div>
@@ -141,7 +153,7 @@
         </div>
     </div>
 
-<div wire:ignore.self class="modal fade" id="category_modal" tabindex="-1" role="dialog"
+    <div wire:ignore.self class="modal fade" id="category_modal" tabindex="-1" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
             <form class="modal-content"
@@ -160,13 +172,13 @@
                     @endif
                     <div class="form-group">
                         <label for=""><b>Parent category</b>:</label>
-                        <select wire:model="parent"  class="custom-select">
+                        <select wire:model="parent" class="custom-select">
                             <option value="0">Uncategorized</option>
-                            @foreach ($pcategories as $item )
-                                  <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @foreach ($pcategories as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
-                         @error('parent')
+                        @error('parent')
                             <span class="text-danger ml-1">{{ $message }}</span>
                         @enderror
                     </div>
@@ -179,7 +191,7 @@
                             <span class="text-danger ml-1">{{ $message }}</span>
                         @enderror
                     </div>
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
