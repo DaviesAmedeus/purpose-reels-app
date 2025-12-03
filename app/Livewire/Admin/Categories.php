@@ -18,6 +18,7 @@ class Categories extends Component
     protected $listeners = [
         'updateParentCategoryOrdering',
         'updateCategoryOrdering',
+        'deleteParentCategoryAction',
         'deleteCategoryAction'
     ];
 
@@ -64,8 +65,9 @@ class Categories extends Component
         }
     }
 
-    public function updateCategoryOrdering($positions){
-         foreach ($positions as $position) {
+    public function updateCategoryOrdering($positions)
+    {
+        foreach ($positions as $position) {
             $index = $position[0];
             $new_position = $position[1];
             Category::where('id', $index)->update([
@@ -76,11 +78,31 @@ class Categories extends Component
         }
     }
 
+    public function deleteCategory($id)
+    {
+        $this->dispatch('deleteCategory', ['id' => $id]);
+    }
+
     public function deleteParentCategory($id)
     {
         $this->dispatch('deleteParentCategory', ['id' => $id]);
     }
+
     public function deleteCategoryAction($id)
+    {
+        $category = Category::findOrFail($id);
+        // Check if this category has related post(s)
+
+        // Delete parent category
+        $delete = $category->delete();
+        if ($delete) {
+            $this->dispatch('showToastr', ['type' => 'success', 'message' => 'Category has been deleted successfully']);
+        } else {
+            $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
+        }
+    }
+
+    public function deleteParentCategoryAction($id)
     {
         $pcategory = ParentCategory::findOrFail($id);
         // Check if parent category has children
@@ -108,7 +130,7 @@ class Categories extends Component
     {
         $pcategory = ParentCategory::findOrFail($this->pcategory_id);
         $this->validate([
-            'pcategory_name' => 'required|unique:parent_categories,name,'.$pcategory->id
+            'pcategory_name' => 'required|unique:parent_categories,name,' . $pcategory->id
         ], [
             'pcategory_name.required' => 'Parent category field is required!',
             'pcategory_name.unique' => 'Parent category name is taken'
@@ -170,10 +192,11 @@ class Categories extends Component
     }
 
 
-    public function updateCategory(){
-         $category = Category::findOrFail($this->category_id);
+    public function updateCategory()
+    {
+        $category = Category::findOrFail($this->category_id);
         $this->validate([
-            'category_name' => 'required|unique:categories,name,'.$category->id
+            'category_name' => 'required|unique:categories,name,' . $category->id
         ], [
             'category_name.required' => 'Category field is required!',
             'category_name.unique' => 'Category already exists!'
@@ -181,19 +204,16 @@ class Categories extends Component
 
         // Update the category
         $category->name = $this->category_name;
-        $category->parent= $this->parent;
+        $category->parent = $this->parent;
         $category->slug = null;
-        $updated= $category->save();
+        $updated = $category->save();
 
-        if($updated){
+        if ($updated) {
             $this->hideCategoryModalForm();
             $this->dispatch('showToastr', ['type' => 'success', 'message' => 'Category has been updated successfully!']);
-        }else{
+        } else {
             $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
         }
-
-
-
     }
 
     public function showParentCategoryModalForm()

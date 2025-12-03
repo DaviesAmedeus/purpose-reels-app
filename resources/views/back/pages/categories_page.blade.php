@@ -68,9 +68,29 @@
 
         window.addEventListener('deleteParentCategory', function(event) {
             var id = event.detail[0].id;
+            // using ijabo
             $().konfirma({
                 title: 'Are you sure?',
                 html: 'You want to delete this parent category',
+                cancelButtonText: 'Cancel',
+                confirmButtonText: 'Yes, Delete',
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#3085d6',
+                width: 400,
+                allowOutsideClick: false,
+                fontSize: '1rem',
+                done: function() {
+                    Livewire.dispatch('deleteParentCategoryAction', [id]);
+                }
+            });
+        });
+
+        window.addEventListener('deleteCategory', function(event){
+            var id = event.detail[0].id;
+            // using ijabo
+            $().konfirma({
+                title: 'Are you sure?',
+                html: 'You want to delete this category',
                 cancelButtonText: 'Cancel',
                 confirmButtonText: 'Yes, Delete',
                 cancelButtonColor: '#d33',
