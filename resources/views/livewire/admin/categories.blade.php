@@ -52,7 +52,9 @@
                         </tbody>
                     </table>
                 </div>
-
+                <div class="d-block mt-1 text-center">
+                    {{ $pcategories->links('livewire::simple-bootstrap') }}
+                </div>
             </div>
         </div>
 
@@ -81,16 +83,19 @@
                         <tbody id="sortable_categories">
                             @forelse ($categories as $item)
                                 <tr data-index="{{ $item->id }}" data-ordering="{{ $item->ordering }}">
-                                    <td>{{ $item->id  }}</td>
+                                    <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ !is_null($item->parent_category) ? $item->parent_category->name : '-' }}</td>
+                                    <td>{{ !is_null($item->parent_category) ? $item->parent_category->name : '-' }}
+                                    </td>
                                     <td>4</td>
                                     <td>
                                         <div class="table-actions">
-                                            <a href="javascript:;" wire:click="editCategory({{ $item->id }})" class="text-primary mx-2">
+                                            <a href="javascript:;" wire:click="editCategory({{ $item->id }})"
+                                                class="text-primary mx-2">
                                                 <i class="dw dw-edit2"></i>
                                             </a>
-                                            <a href="javascript:;" wire:click="deleteCategory({{ $item->id }})" class="text-danger mx-2">
+                                            <a href="javascript:;" wire:click="deleteCategory({{ $item->id }})"
+                                                class="text-danger mx-2">
                                                 <i class="dw dw-delete-3"></i>
                                             </a>
                                         </div>
@@ -108,7 +113,9 @@
                         </tbody>
                     </table>
                 </div>
-
+                <div class="d-block mt-1 text-center">
+                    {{ $categories->links('livewire::simple-bootstrap') }}
+                </div>
             </div>
         </div>
     </div>

@@ -5,12 +5,18 @@ namespace App\Livewire\Admin;
 use App\Models\Category;
 use App\Models\ParentCategory;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Categories extends Component
 {
+    use WithPagination;
 
     public $isUpdateParentCategoryMode = false;
     public $pcategory_id, $pcategory_name;
+
+    public $pcategoriesPerPage =5;
+    public $categoriesPerPage =10;
+
 
     public  $isUpdateCategoryMode = false;
     public $category_id, $parent = 0, $category_name;
@@ -106,6 +112,13 @@ class Categories extends Component
     {
         $pcategory = ParentCategory::findOrFail($id);
         // Check if parent category has children
+        if($pcategory->children->count() > 0){
+            foreach($pcategory->children as $category){
+            // Release a category
+            Category::where('id', $category->id)->update(['parent'=>0]);
+            }
+
+      }
 
         // Delete parent category
         $delete = $pcategory->delete();
@@ -247,8 +260,8 @@ class Categories extends Component
     public function render()
     {
         return view('livewire.admin.categories', [
-            'pcategories' => ParentCategory::orderBy('ordering', 'asc')->get(),
-            'categories' => Category::orderBy('ordering', 'asc')->get()
+            'pcategories' => ParentCategory::orderBy('ordering', 'asc')->paginate($this->pcategoriesPerPage, ['*'], 'pcat_page'),
+            'categories' => Category::orderBy('ordering', 'asc')->paginate($this->categoriesPerPage,['*'], 'cat_page')
         ]);
     }
 }
