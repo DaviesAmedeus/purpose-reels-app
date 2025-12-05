@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 use App\Models\ParentCategory;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -61,6 +63,27 @@ class PostController extends Controller
             $upload = $file->move(public_path($path), $new_filename);
 
             if ($upload) {
+                /**Generate resized image & thumbnail */
+                $resized_path= $path.'resized/';
+                if(!File::isDirectory($resized_path)){
+                    File::makeDirectory($resized_path, 0777,true,true);
+                }
+
+                // Thumbnail (aspect ratio: 1)
+                Image::make($path.$new_filename)
+                    ->fit(250,250)
+                    ->save($resized_path.'thumb_'.$new_filename);
+
+                // Resized Image (Aspect ratio: 1.6)
+                Image::make($path.$new_filename)
+                    ->fit(512,320)
+                    ->save($resized_path.'resized_'.$new_filename);
+
+
+
+
+
+                $resized_path =
                 $post = new Post();
                 $post->author_id = auth()->id();
                 $post->category = $request->category;
