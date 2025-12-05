@@ -39,7 +39,7 @@
                         </div>
                         <div class="form-group">
                             <label for=""><b>Content</b>:</label>
-                            <textarea name="content" id="" cols="30" rows="10" class="form-control"
+                            <textarea name="content" id="content" cols="30" rows="10" class="ckeditor form-control"
                                 placeholder="Enter post content here"></textarea>
                             <span class="text-danger error-text content_error"></span>
 
@@ -118,6 +118,7 @@
 @push('scripts')
     {{-- For tags interactivity --}}
     <script src="{{ asset('back/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js') }}"></script>
+    <script src="{{ asset('ckeditor4-4.22.1/ckeditor.js') }}"></script>
     <script>
         $('input[type="file"][name="featured_image"]').ijaboViewer({
             preview: 'img#featured_image_preview',
@@ -136,7 +137,9 @@
         $('#addPostForm').on('submit', function(e) {
             e.preventDefault();
             var form = this;
+            var content =CKEDITOR.instances.content.getData();
             var formdata = new FormData(form);
+                formdata.append('content', content);
 
             $.ajax({
                 url: $(form).attr('action'),
@@ -151,6 +154,7 @@
                 success: function(data) {
                     if (data.status == 1) {
                         $(form)[0].reset();
+                        CKEDITOR.instances.content.setData('')
                         $('img#featured_image_preview').attr('src', '');
                         $('input[name="tags"]').tagsinput('removeAll');
                         $().notifa({
