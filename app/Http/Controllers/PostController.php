@@ -79,22 +79,16 @@ class PostController extends Controller
                     ->fit(512,320)
                     ->save($resized_path.'resized_'.$new_filename);
 
-
-
-
-
-                $resized_path =
                 $post = new Post();
                 $post->author_id = auth()->id();
                 $post->category = $request->category;
                 $post->title = $request->title;
                 $post->content = $request->content;
-                $post->featured_image = $request->featured_image;
+                $post->featured_image = $new_filename;
                 $post->tags = $request->tags;
                 $post->meta_keywords = $request->meta_keywords;
                 $post->meta_description = $request->meta_description;
                 $post->visibility = $request->visibility;
-                $post->featured_image = $request->featured_image;
                 $saved = $post->save();
 
                 if ($saved) {
@@ -106,5 +100,15 @@ class PostController extends Controller
                 return response()->json(['status' => 0, 'message' => 'Something went wrong on uploading  a featured image']);
             }
         }
+    }
+
+
+    public function allPosts(Request $request){
+        $data = [
+            'pageTitle'=>'Posts'
+        ];
+        return view('back.pages.posts', $data);
+
+
     }
 }
