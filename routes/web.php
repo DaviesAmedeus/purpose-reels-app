@@ -47,13 +47,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             });
         });
 
-        Route::controller(PostController::class)->group(function(){
+        Route::controller(PostController::class)->group(function () {
+
             Route::get('/post/new', 'addPost')->name('add_post');
             Route::post('/post/create', 'createPost')->name('create_post');
             Route::get('/posts', 'allPosts')->name('posts');
+            Route::get('/post/{id}/edit', 'editPost')->name('edit_post');
+            Route::post('/post/update', 'updatePost')->name('update_post');
+
         });
-
-
-
     });
 });
