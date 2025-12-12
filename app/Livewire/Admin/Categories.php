@@ -14,8 +14,8 @@ class Categories extends Component
     public $isUpdateParentCategoryMode = false;
     public $pcategory_id, $pcategory_name;
 
-    public $pcategoriesPerPage =5;
-    public $categoriesPerPage =10;
+    public $pcategoriesPerPage = 5;
+    public $categoriesPerPage = 10;
 
 
     public  $isUpdateCategoryMode = false;
@@ -98,13 +98,18 @@ class Categories extends Component
     {
         $category = Category::findOrFail($id);
         // Check if this category has related post(s)
+        if ($category->posts->count() > 0) {
+            $count= $category->posts->count();
+            $this->dispatch('showToastr',['type'=>'error', 'message'=>'You cant delete this category. It has ('.$count.') related post(s)']);
 
-        // Delete parent category
-        $delete = $category->delete();
-        if ($delete) {
-            $this->dispatch('showToastr', ['type' => 'success', 'message' => 'Category has been deleted successfully']);
         } else {
-            $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
+            // Delete parent category
+            $delete = $category->delete();
+            if ($delete) {
+                $this->dispatch('showToastr', ['type' => 'success', 'message' => 'Category has been deleted successfully']);
+            } else {
+                $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
+            }
         }
     }
 
@@ -112,13 +117,12 @@ class Categories extends Component
     {
         $pcategory = ParentCategory::findOrFail($id);
         // Check if parent category has children
-        if($pcategory->children->count() > 0){
-            foreach($pcategory->children as $category){
-            // Release a category
-            Category::where('id', $category->id)->update(['parent'=>0]);
+        if ($pcategory->children->count() > 0) {
+            foreach ($pcategory->children as $category) {
+                // Release a category
+                Category::where('id', $category->id)->update(['parent' => 0]);
             }
-
-      }
+        }
 
         // Delete parent category
         $delete = $pcategory->delete();
@@ -261,7 +265,7 @@ class Categories extends Component
     {
         return view('livewire.admin.categories', [
             'pcategories' => ParentCategory::orderBy('ordering', 'asc')->paginate($this->pcategoriesPerPage, ['*'], 'pcat_page'),
-            'categories' => Category::orderBy('ordering', 'asc')->paginate($this->categoriesPerPage,['*'], 'cat_page')
+            'categories' => Category::orderBy('ordering', 'asc')->paginate($this->categoriesPerPage, ['*'], 'cat_page')
         ]);
     }
 }
