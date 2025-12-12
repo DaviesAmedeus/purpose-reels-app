@@ -206,7 +206,6 @@ class PostController extends Controller
             }
         }
         //UPDATING post data in database
-        $post->author_id = auth()->id();
         $post->category = $request->category;
         $post->title = $request->title;
         $post->slug = null;

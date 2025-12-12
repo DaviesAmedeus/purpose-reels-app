@@ -28,3 +28,23 @@
 @livewire('admin.posts')
 
 @endsection
+
+@push('scripts')
+<script>
+    window.addEventListener('deletePost', function(event){
+        var id = event.detail[0].id;
+        // ijabo paks confirmation model
+        $().konfirma({
+            title: 'Are you sure?',
+            html: 'You want  to delete this post',
+            cancelButtonText: 'Cancel',
+            confirmButtonText: 'Yes, Delete',
+            fontSize: '0.87rem',
+            done: function(){
+                Livewire.dispatch('deletePostAction', [id]);
+            }
+        });
+    });
+</script>
+
+@endpush

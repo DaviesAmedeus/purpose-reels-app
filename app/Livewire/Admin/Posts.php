@@ -7,13 +7,14 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\ParentCategory;
 use App\Models\Category;
+use Illuminate\Support\Facades\File;
 
 
 class Posts extends Component
 {
     use WithPagination;
 
-    public $perPage = 2;
+    public $perPage = 10;
     public $categories_html;
 
     // filter properties
@@ -23,6 +24,10 @@ class Posts extends Component
     public $visibility = null;
     public $sortBy = 'desc';
     public $post_visibility;
+
+    protected $listeners = [
+        'deletePostAction'
+    ];
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -54,6 +59,7 @@ class Posts extends Component
 
     public function mount()
     {
+        $this->author = auth()->user()->type == "superAdmin" ? auth()->user()->id : '';
         $this->post_visibility = $this->visibility == 'public' ? 1 : 0;
 
         // prepare categories selection
@@ -90,6 +96,45 @@ class Posts extends Component
 
 
         $this->categories_html = $categories_html;
+    }
+
+    public function deletePost($id){
+        $this->dispatch('deletePost',['id'=>$id]);
+    }
+
+
+    public function deletePostAction($id){
+        $post = Post::findOrFail($id);
+        $path = "images/posts/";
+        $resized_path = $path.'resized/';
+        $old_featured_image = $post->featured_image;
+
+        // Delete featured image
+        if($old_featured_image != "" && File::exists(public_path($path.$old_featured_image))){
+            File::delete(public_path($path.$old_featured_image));
+
+            // delete resized Image
+            if(File::exists(public_path($resized_path.'resized_'.$old_featured_image))){
+                File::delete(public_path($resized_path.'resized_'.$old_featured_image));
+            }
+
+             // delete thumbnail
+            if(File::exists(public_path($resized_path.'thumb_'.$old_featured_image))){
+                File::delete(public_path($resized_path.'thumb_'.$old_featured_image));
+            }
+        }
+
+        // Now Deleting post from database
+        $delete = $post->delete();
+
+        if($delete){
+             $this->dispatch('showToastr',['type'=>'success', 'message'=>'Post has been deleted successfully!']);
+        }else{
+            $this->dispatch('showToastr',['type'=>'error', 'message'=>'Something went wrong!']);
+        }
+
+
+
     }
 
 
