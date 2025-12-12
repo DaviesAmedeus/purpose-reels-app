@@ -2,20 +2,32 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('front.pages.front-example');
-});
+// Route::get('/', function () {
+//     return view('front.pages.front-example');
+// });
+
+//**FRONT-END ROUTES */
+Route::get('/', [BlogController::class, 'index'])->name('home');
+Route::get('/post{slug}', [BlogController::class, 'readPost'])->name('read_post');
+// displaying all posts associated with the selected category
+Route::get('/posts/category/{slug}', [BlogController::class, 'categoryPosts'])->name('category_posts');
+// displaying all posts with the selected author username
+Route::get('/posts/author/{username}', [BlogController::class, 'authorPosts'])->name('author_posts');
+// displaying all posts associated with the select tag
+Route::get('/posts/tag/{any}', [BlogController::class, 'tagPosts'])->name('tag_posts');
+// displaying search results for posts
+Route::get('/search', [BlogController::class, 'searchPosts'])->name('search_posts');
 
 
-// TESTING ROUTES
+//**TESTING ROUTES */
 Route::view('/example-page', 'example-page');
 Route::view('/example-auth', 'example-auth');
 
-
-// ADMIN ROUTES
+//** ADMIN ROUTES */
 Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['guest', 'preventBackHistory'])->group(function () {

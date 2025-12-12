@@ -3,10 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <title>@yield('pageTitle')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-    <meta name="description" content="This is meta description">
-    <meta name="author" content="SawaStacks">
+    @yield('meta_tags')
     <link rel="shortcut icon" href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}" type="image/x-icon">
     <link rel="icon" href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('front/plugins/bootstrap/bootstrap.min.css') }}">
