@@ -48,7 +48,7 @@ class PostController extends Controller
             'title' => 'required|unique:posts,title',
             'content' => 'required',
             'category' => 'required|exists:categories,id',
-            'featured_image' => 'required|mimes:png,jpg,jpeg|max:1024'
+            'featured_image' => 'required|mimes:png,jpg,jpeg|max:2050'
         ]);
 
 
@@ -156,7 +156,7 @@ class PostController extends Controller
             'title' => 'required|unique:posts,title,' . $post->id,
             'content' => 'required',
             'category' => 'required|exists:categories,id',
-            'featured_image' => 'nullable|mimes:jpeg,jpg,png|max:1024'
+            'featured_image' => 'nullable|mimes:jpeg,jpg,png|max:2050'
 
         ]);
 
