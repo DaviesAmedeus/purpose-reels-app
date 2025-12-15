@@ -1,8 +1,12 @@
 <?php
 
+use Carbon\Carbon;
+use App\Models\Post;
+use App\Models\Category;
+use Illuminate\Support\Str;
 use App\Models\GeneralSetting;
 use App\Models\ParentCategory;
-use App\Models\Category;
+
 
 
 /*** Site Information */
@@ -41,7 +45,6 @@ if (!function_exists('navigations')) {
                                 aria-haspopup="true" aria-expanded="false">' . $item->name . ' <i class="ti-angle-down ml-1"></i>
                             </a>
                             <div class="dropdown-menu">
-
             ';
 
                 foreach ($item->children as $category) {
@@ -67,5 +70,42 @@ if (!function_exists('navigations')) {
         }
 
         return $navigations_html;
+    }
+}
+
+/**DATE FORMAT eg: January 12, 2025 */
+if(!function_exists('date_formatter')){
+    function date_formatter($value){
+        return Carbon::createFromFormat('Y-m-d H:i:s', $value)->isoFormat('LL');
+    }
+}
+
+/** STRIP WORD */
+if(!function_exists('words')){
+    function words($value, $words = 15, $end= "..."){
+        return Str::words(strip_tags($value), $words, $end);
+    }
+}
+
+/** CALCULATE POST READING DURATION */
+if(!function_exists('readDuration')){
+    function readDuration(...$text){
+        Str::macro('timeCounter', function($text){
+            $totalWords = str_word_count(implode(" ",$text));
+            $minutesToRead = round($totalWords/200);
+            return (int)max(1,$minutesToRead);
+        });
+        return Str::timeCounter($text);
+    }
+}
+
+/** DISPLAY LATEST POSTS ON HOMEPAGE */
+if(!function_exists('latest_posts')){
+    function latest_posts($skip=0, $limit = 5){
+        return Post::skip($skip)
+            ->limit($limit)
+            ->where('visibility',1)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 }
