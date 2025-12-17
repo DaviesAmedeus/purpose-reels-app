@@ -61,7 +61,8 @@
                                 </li>
                             </ul>
                             <p>{!! Str::ucfirst(words($post->content, 45)) !!}</p>
-                            <a href="{{ route('read_post', $post->slug) }}" class="btn btn-outline-primary">Read more...</a>
+                            <a href="{{ route('read_post', $post->slug) }}" class="btn btn-outline-primary">Read
+                                more...</a>
                         </div>
                     @endforeach
                 @endif
@@ -75,8 +76,8 @@
                         <article class="row mb-5">
                             <div class="col-md-4 mb-4 mb-md-0">
                                 <div class="post-img-box">
-                                    <img src="{{ asset('images/posts/resized/resized_'.$post->featured_image) }}" class="img-fluid rounded-lg"
-                                        alt="post-thumb">
+                                    <img src="{{ asset('images/posts/resized/resized_' . $post->featured_image) }}"
+                                        class="img-fluid rounded-lg" alt="post-thumb">
                                 </div>
                             </div>
                             <div class="col-md-8">
@@ -86,17 +87,21 @@
                                     </a>
                                 </h4>
                                 <ul class="list-inline post-meta mb-2">
-                                    <li class="list-inline-item"><i class="ti-user mr-2"></i><a href="{{ route('author_posts', $post->author->username) }}">{{ $post->author->name }}</a>
+                                    <li class="list-inline-item"><i class="ti-user mr-2"></i><a
+                                            href="{{ route('author_posts', $post->author->username) }}">{{ $post->author->name }}</a>
                                     </li>
                                     <li class="list-inline-item">Date : {{ date_formatter($post->created_at) }}</li>
-                                    <li class="list-inline-item">Category : <a href="{{ route('category_posts', $post->post_category->slug) }}" class="ml-1">{{ $post->post_category->name }}</a>
+                                    <li class="list-inline-item">Category : <a
+                                            href="{{ route('category_posts', $post->post_category->slug) }}"
+                                            class="ml-1">{{ $post->post_category->name }}</a>
                                     </li>
                                     <li class="list-inline-item"><i class="ti-timer mr-1"></i>
-                                    {{ readDuration($post->title, $post->content) }} @choice('min|mins', readDuration($post->title, $post->content))
+                                        {{ readDuration($post->title, $post->content) }} @choice('min|mins', readDuration($post->title, $post->content))
                                     </li>
                                 </ul>
-                                <p>{!! Str::ucfirst(words($post->content, 30 )) !!}</p>
-                                <a href="{{ route('read_post', $post->slug) }}" class="btn btn-outline-primary">Read more...</a>
+                                <p>{!! Str::ucfirst(words($post->content, 30)) !!}</p>
+                                <a href="{{ route('read_post', $post->slug) }}" class="btn btn-outline-primary">Read
+                                    more...</a>
                             </div>
                         </article>
                     @endforeach
@@ -120,32 +125,7 @@
                 </form>
             </div>
             <!-- categories -->
-            <div class="widget">
-                <h5 class="widget-title"><span>Categories</span></h5>
-                <ul class="list-unstyled widget-list">
-                    <li><a href="#!" class="d-flex">Frontend Frameworks
-                            <small class="ml-auto">(4)</small></a>
-                    </li>
-                    <li><a href="#!" class="d-flex">Mobile App Development
-                            <small class="ml-auto">(12)</small></a>
-                    </li>
-                    <li><a href="#!" class="d-flex">Cybersecurity Essentials
-                            <small class="ml-auto">(19)</small></a>
-                    </li>
-                    <li><a href="#!" class="d-flex">Data Structure and Algorithm
-                            <small class="ml-auto">(24)</small></a>
-                    </li>
-                    <li><a href="#!" class="d-flex">API Development and Integration
-                            <small class="ml-auto">(3)</small></a>
-                    </li>
-                    <li><a href="#!" class="d-flex">Database Management
-                            <small class="ml-auto">(8)</small></a>
-                    </li>
-                    <li><a href="#!" class="d-flex">Backend Development
-                            <small class="ml-auto">(3)</small></a>
-                    </li>
-                </ul>
-            </div>
+         <x-sidebar-categories />
             <!-- tags -->
             <div class="widget">
                 <h5 class="widget-title"><span>Tags</span></h5>

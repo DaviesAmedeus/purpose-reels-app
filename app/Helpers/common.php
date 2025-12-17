@@ -109,3 +109,17 @@ if(!function_exists('latest_posts')){
             ->get();
     }
 }
+
+
+/** LISTING CATEGORIES WITH NUMBER OF POSTS */
+if(!function_exists('sidebar_categories')){
+    function sidebar_categories($limit = 8){
+       return Category::withCount('posts')
+            ->having('posts_count', '>', 0)
+            ->limit($limit)
+            ->orderBy('posts_count','desc')
+            ->get();
+
+    }
+}
+
