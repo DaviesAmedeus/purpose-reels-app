@@ -123,3 +123,22 @@ if(!function_exists('sidebar_categories')){
     }
 }
 
+/**FETCH ALL TAGS FROM THE posts TABLE */
+if(!function_exists('getTags')){
+ function getTags($limit=null){
+    $tags = Post::where('tags', '!=', '')->pluck('tags');
+    // Split the  tags into an array and remove duplicate
+    $uniqueTags = $tags->flatMap(function($tagsString){
+        return explode(',', $tagsString);
+    })->map(fn($tag)=>trim($tag))//Trim any extra white space
+    ->unique() //prevents duplication of tags to appear
+    ->sort()
+    ->values();
+
+    if($limit){
+        $uniqueTags = $uniqueTags->take($limit);
+    }
+    return $uniqueTags->all();
+ }
+}
+
