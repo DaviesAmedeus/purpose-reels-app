@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use Artesaos\SEOTools\Facades\SEOTools;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\SEOTools;
 
 class BlogController extends Controller
 {
@@ -33,5 +35,28 @@ class BlogController extends Controller
 
         $data = ['pageTitle'=>$title];
         return view('front.pages.index', $data);
+    }
+
+
+    public function categoryPosts(Request $request, $slug=null){
+        // Find Category by slug
+        $category = Category::where('slug',$slug)->firstOrFail();
+
+        // Retrieve posts related to this category and paginate
+        $posts = Post::where('category', $category->id)->paginate(8);
+
+        $title = 'Posts in Category'.$category->name;
+        $description = 'Browse the latest posts in the '.$category->name.' category. Stay updated!';
+
+        /**Set SEO Meta Tags */
+        SEOTools::setTitle($title,false);
+        SEOTools::setDescription($description);
+        SEOTools::opengraph()->setUrl(url()->current());
+
+        $data = [
+            'pageTitle'=> $category->name,
+            'posts'=>$posts
+        ];
+        return view('front.pages.category_posts', $data);
     }
 }
