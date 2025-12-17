@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Artesaos\SEOTools\Facades\SEOMeta;
@@ -10,10 +11,11 @@ use Artesaos\SEOTools\Facades\SEOTools;
 
 class BlogController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $title = isset(settings()->site_title) ? settings()->site_title : '';
         $description = isset(settings()->site_meta_description) ? settings()->site_meta_description : '';
-        $imgURL = isset(settings()->site_logo) ? asset('/images/site/'.settings()->site_logo) : '';
+        $imgURL = isset(settings()->site_logo) ? asset('/images/site/' . settings()->site_logo) : '';
         $keywords = isset(settings()->site_meta_keywords) ? settings()->site_meta_keywords : '';
         $currentUrl = url()->current();
 
@@ -30,33 +32,65 @@ class BlogController extends Controller
         /** Twitter */
         SEOTools::twitter()->addImage($imgURL);
         SEOTools::twitter()->setUrl($currentUrl);
-        SEOTools::twitter()->setSite ('@purpose_reels');
+        SEOTools::twitter()->setSite('@purpose_reels');
 
 
-        $data = ['pageTitle'=>$title];
+        $data = ['pageTitle' => $title];
         return view('front.pages.index', $data);
     }
 
 
-    public function categoryPosts(Request $request, $slug=null){
+    public function categoryPosts(Request $request, $slug = null)
+    {
         // Find Category by slug
-        $category = Category::where('slug',$slug)->firstOrFail();
+        $category = Category::where('slug', $slug)->firstOrFail();
 
         // Retrieve posts related to this category and paginate
         $posts = Post::where('category', $category->id)->paginate(8);
 
-        $title = 'Posts in Category'.$category->name;
-        $description = 'Browse the latest posts in the '.$category->name.' category. Stay updated!';
+        $title = 'Posts in Category' . $category->name;
+        $description = 'Browse the latest posts in the ' . $category->name . ' category. Stay updated!';
 
         /**Set SEO Meta Tags */
-        SEOTools::setTitle($title,false);
+        SEOTools::setTitle($title, false);
         SEOTools::setDescription($description);
         SEOTools::opengraph()->setUrl(url()->current());
 
         $data = [
-            'pageTitle'=> $category->name,
-            'posts'=>$posts
+            'pageTitle' => $category->name,
+            'posts' => $posts
         ];
         return view('front.pages.category_posts', $data);
+    }
+
+
+    public function authorPosts(Request $request, $username = null)
+    {
+        // find the author based on the username
+        $author = User::where('username', $username)->firstOrFail();
+
+        // Retrieve posts related to this username
+        $posts = Post::where('author_id', $author->id)->orderBy('created_at', 'asc')->paginate(8);
+        $title = $author->name . ' -Blog posts';
+        $description = 'Explore latest posts by .' . $author->name . ' on various topics!';
+
+        /**Set SEO Meta Tags */
+        SEOTools::setTitle($title, false);
+        SEOTools::setDescription($description);
+        SEOTools::setCanonical(route('author_posts', ['username' => $author->username]));
+        SEOTools::opengraph()->setUrl(route('author_posts', ['username' => $author->username]));
+        SEOTools::opengraph()->addProperty('type', 'profile');
+        SEOTools::opengraph()->setProfile([
+            'first_name' => $author->name,
+            'username' => $author->username
+        ]);
+
+
+        $data = [
+            'pageTitle'=> $author->name,
+            'author'=>$author,
+            'posts'=>$posts
+        ];
+        return view('front.pages.author_posts', $data);
     }
 }
