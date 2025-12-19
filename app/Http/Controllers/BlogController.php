@@ -87,10 +87,81 @@ class BlogController extends Controller
 
 
         $data = [
-            'pageTitle'=> $author->name,
-            'author'=>$author,
-            'posts'=>$posts
+            'pageTitle' => $author->name,
+            'author' => $author,
+            'posts' => $posts
         ];
         return view('front.pages.author_posts', $data);
+    }
+
+
+    public function tagPosts(Request $request, $tag = null)
+    {
+
+        // Query posts that have the selcted tag
+        $posts = Post::where('tags', 'LIKE', "%{$tag}%")->where('visibility', 1)->paginate(8);
+
+        /**For Meta Tags */
+        $title = "Posts tagged with {$tag}";
+        $description = "Explore all posts tagged with {$tag} o our blog";
+
+        /**Set SEO Meta Tags */
+        SEOTools::setTitle($title, false);
+        SEOTools::setDescription($description);
+        SEOTools::setCanonical(url()->current());
+
+        SEOTools::opengraph()->setUrl(url()->current());
+        SEOTools::opengraph()->addProperty('type', 'articles');
+
+        $data = [
+            'pageTitle' => $title,
+            'tag' => $tag,
+            'posts' => $posts
+        ];
+        return view('front.pages.tag_posts', $data);
+    }
+
+
+    public function searchPosts(Request $request)
+    {
+        // Get search query from the input
+        $query = $request->input('q');
+
+        // if query is not empty, process search
+        if ($query) {
+            $keywords = explode(' ', $query);
+            $postsQuery = Post::query();
+
+            foreach($keywords as $keyword){
+                $postsQuery->orWhere('title', 'LIKE', '%'.$keyword.'%')
+                        ->orWhere('tags', 'LIKE','%'.$keyword.'%');
+            }
+            $posts = $postsQuery->where('visibility', 1)
+                                ->orderBy('created_at', 'desc')
+                                ->paginate(20);
+
+            /**For meta tags */
+            $title = "Search results for {$query}";
+            $description = "Browse search results for {$query} on our blog";
+
+        } else {
+            $posts = collect();
+
+            /**For meta tags */
+            $title = 'Search';
+            $description = 'Search for blog posts on our website';
+        }
+
+
+        SEOTools::setTitle($title,false);
+        SEOTools::setDescription($description);
+
+        $data = [
+            'pageTitle'=>$title,
+            'query'=>$query,
+            'posts'=>$posts
+        ];
+
+        return view('front.pages.search_posts', $data);
     }
 }

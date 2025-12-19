@@ -48,9 +48,9 @@
                     <div class="search px-4">
                         <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
                         <div class="search-wrapper">
-                            <form action="javascript:void(0)" class="h-100">
-                                <input class="search-box pl-4" id="search-query" name="s" type="search"
-                                    placeholder="Type to discover articles, guide &amp; tutorials... ">
+                            <form action="{{ route('search_posts') }}" method="GET" class="h-100">
+                                <input class="search-box pl-4" id="search-query" name="q" type="search"
+                                    placeholder="Andika kupata mafunzo, makala &amp; simulizi mbalimbali..." value="{{ request('q') ? request('q ') : '' }}">
                             </form>
                             <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
                         </div>

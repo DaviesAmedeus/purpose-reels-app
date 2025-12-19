@@ -4,7 +4,7 @@
     {!! SEO::generate() !!}
 @endsection
 @section('content')
-    >
+
     <div class="row">
         <div class="col-lg-8  mb-5 mb-lg-0">
 
@@ -115,15 +115,7 @@
         </div>
         <aside class="col-lg-4">
             <!-- Search -->
-            <div class="widget">
-                <h5 class="widget-title"><span>Search</span></h5>
-                <form action="" class="widget-search">
-                    <input id="search-query" name="s" type="search"
-                        placeholder="Type to discover articles, guide &amp; tutorials...">
-                    <button type="submit"><i class="ti-search"></i>
-                    </button>
-                </form>
-            </div>
+            <x-sidebaer-search />
             <!-- categories -->
             <x-sidebar-categories />
             <!-- tags -->
