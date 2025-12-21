@@ -46,7 +46,9 @@ class BlogController extends Controller
         $category = Category::where('slug', $slug)->firstOrFail();
 
         // Retrieve posts related to this category and paginate
-        $posts = Post::where('category', $category->id)->paginate(8);
+        $posts = Post::where('category', $category->id)
+                    ->where('visibility',1)
+                    ->paginate(8);
 
         $title = 'Posts in Category' . $category->name;
         $description = 'Browse the latest posts in the ' . $category->name . ' category. Stay updated!';
@@ -69,8 +71,12 @@ class BlogController extends Controller
         // find the author based on the username
         $author = User::where('username', $username)->firstOrFail();
 
-        // Retrieve posts related to this username
-        $posts = Post::where('author_id', $author->id)->orderBy('created_at', 'asc')->paginate(8);
+        // Retrieve posts related to this username and paginate
+        $posts = Post::where('author_id', $author->id)
+            ->where('visibility',1)
+            ->orderBy('created_at', 'asc')
+            ->paginate(8);
+
         $title = $author->name . ' -Blog posts';
         $description = 'Explore latest posts by .' . $author->name . ' on various topics!';
 

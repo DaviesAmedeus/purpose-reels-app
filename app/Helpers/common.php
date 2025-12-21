@@ -142,3 +142,17 @@ if(!function_exists('getTags')){
  }
 }
 
+/** LISTING SISEBAR LATEST POSTS */
+if(!function_exists('sidebar_latest_posts')){
+    function sidebar_latest_posts($limit=5, $except=null){
+        $posts = Post::limit($limit);
+        if($except){
+            $posts = $posts->where('id', '!=', $except);
+        }
+        return $posts->where('visibility',1)
+                    ->orderBy('created_at', 'desc')
+                    ->get(); 
+    }
+}
+
+

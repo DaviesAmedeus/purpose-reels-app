@@ -119,69 +119,34 @@
             <!-- categories -->
             <x-sidebar-categories />
             <!-- tags -->
-           <x-sidebar-tags />
+            <x-sidebar-tags />
             <!-- latest post -->
             <div class="widget">
                 <h5 class="widget-title"><span>Latest Article</span></h5>
                 <!-- post-item -->
-                <ul class="list-unstyled widget-list">
-                    <li class="media widget-post align-items-center">
-                        <a href="post-details.html">
-                            <img loading="lazy" class="mr-3" src="{{ asset('front/images/posts/05.png') }}">
-                        </a>
-                        <div class="media-body">
-                            <h6 class="mb-0">
-                                <a href="post-details.html">Optimizing CodeIgniter Applications for Speed.</a>
-                            </h6>
-                            <small>June 10, 2024</small>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="list-unstyled widget-list">
-                    <li class="media widget-post align-items-center">
-                        <a href="post-details.html">
-                            <img loading="lazy" class="mr-3" src="{{ asset('front/images/posts/06.png') }}">
-                        </a>
-                        <div class="media-body">
-                            <h6 class="mb-0"><a href="post-details.html">CSS Animations: Adding Life to Your Web
-                                    Page</a>
-                            </h6>
-                            <small>June 27, 2024</small>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="list-unstyled widget-list">
-                    <li class="media widget-post align-items-center">
-                        <a href="post-details-2.html">
-                            <img loading="lazy" class="mr-3" src="{{ asset('front/images/posts/07.png') }}">
-                        </a>
-                        <div class="media-body">
-                            <h6 class="mb-0"><a href="post-details-2.html">PHP Error Handling: Best Practices for
-                                    Beginners</a>
-                            </h6>
-                            <small>June 03, 2024</small>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="list-unstyled widget-list">
-                    <li class="media widget-post align-items-center">
-                        <a href="post-details-2.html">
-                            <img loading="lazy" class="mr-3" src="{{ asset('front/images/posts/08.png') }}">
-                        </a>
-                        <div class="media-body">
-                            <h6 class="mb-0"><a href="post-details-2.html">Secure User Authentication with PHP</a>
-                            </h6>
-                            <small>June 03, 2024</small>
-                        </div>
-                    </li>
-                </ul>
+                @foreach (sidebar_latest_posts() as $item)
+                    <ul class="list-unstyled widget-list">
+                        <li class="media widget-post align-items-center">
+                            <a href="{{ route('read_post', $post->slug) }}">
+                                <img loading="lazy" class="mr-3" src="{{ asset('/images/posts/resized/thumb_'.$item->featured_image) }}">
+                            </a>
+                            <div class="media-body">
+                                <h6 class="mb-0">
+                                    <a href="{{ route('read_post', $post->slug) }}">{{ $item->title }}</a>
+                                </h6>
+                                <small>{{ date_formatter($item->created_at) }}</small>
+                            </div>
+                        </li>
+                    </ul>
+                @endforeach
+
+
             </div>
-            <div class="d-flex align-items-center justify-content-center"
-                style="background-color: #655087; height: 200px;">
+            <div class="d-flex align-items-center justify-content-center" style="background-color: #655087; height: 200px;">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 600" class="w-100 h-100 rounded-lg">
                     <rect width="100%" height="100%" fill="#655087" />
-                    <text x="50%" y="50%" fill="white" font-size="36" font-family="Arial, sans-serif"
-                        text-anchor="middle" dy=".3em">
+                    <text x="50%" y="50%" fill="white" font-size="36" font-family="Arial, sans-serif" text-anchor="middle"
+                        dy=".3em">
                         Ad Space
                     </text>
                 </svg>
