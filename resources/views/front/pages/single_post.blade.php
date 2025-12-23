@@ -30,18 +30,25 @@
                 <!-- SHARE BUTTONS -->
                 <div class="share-buttons">
                     <span class="title-color">Share: </span>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=YOUR_URL" target="_blank" class="btn-facebook">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('read_post',$post->slug)) }}" target="_blank" class="btn-facebook">
                         <i class="ti-facebook"></i>
                     </a>
-                    <a href="https://twitter.com/intent/tweet?url=YOUR_URL&amp;text=YOUR_TEXT" target="_blank"
+                     <a href="https://www.instagram.com?u={{ urlencode(route('read_post',$post->slug)) }}" target="_blank" class="btn-instagram">
+                        <i class="ti-instagram"></i>
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('read_post',$post->slug)) }}&amp;text={{ urlencode($post->title) }}" target="_blank"
                         class="btn-twitter">
                         <i class="ti-twitter-alt"></i>
                     </a>
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=YOUR_URL" target="_blank"
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(route('read_post',$post->slug)) }}" target="_blank"
                         class="btn-linkedin">
                         <i class="ti-linkedin"></i>
                     </a>
-                    <a href="mailto:?subject=YOUR_SUBJECT&amp;body=YOUR_URL" target="_blank" class="btn-email">
+                    <a href="https://www.pinterest.com/pin/create/button?url={{ urlencode(route('read_post',$post->slug)) }}" target="_blank"
+                        class="btn-pinterest">
+                        <i class="ti-pinterest"></i>
+                    </a>
+                    <a href="mailto:?subject={{ urlencode('Check out this post:'.$post->title) }}&amp;body={{ urlencode('Found this interesting post: '.route('read_post',$post->slug)) }}" target="_blank" class="btn-email">
                         <i class="ti-email"></i>
                     </a>
                 </div>
@@ -153,3 +160,14 @@
         </aside>
     </div>
 @endsection
+@push('scripts')
+ <script>
+    $(document).on('click''.share-buttons > a', function(e){
+        e.preventDefault();
+        window.open($(this).attr('href'),'','height=450,width=450,top='+($(window).height()/2-275)+', left='+($(window).width()/2-225)+', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+        return false;
+
+    });
+ </script>
+
+@endpush
