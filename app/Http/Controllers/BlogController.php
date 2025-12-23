@@ -47,8 +47,8 @@ class BlogController extends Controller
 
         // Retrieve posts related to this category and paginate
         $posts = Post::where('category', $category->id)
-                    ->where('visibility',1)
-                    ->paginate(8);
+            ->where('visibility', 1)
+            ->paginate(8);
 
         $title = 'Posts in Category' . $category->name;
         $description = 'Browse the latest posts in the ' . $category->name . ' category. Stay updated!';
@@ -73,7 +73,7 @@ class BlogController extends Controller
 
         // Retrieve posts related to this username and paginate
         $posts = Post::where('author_id', $author->id)
-            ->where('visibility',1)
+            ->where('visibility', 1)
             ->orderBy('created_at', 'asc')
             ->paginate(8);
 
@@ -138,18 +138,17 @@ class BlogController extends Controller
             $keywords = explode(' ', $query);
             $postsQuery = Post::query();
 
-            foreach($keywords as $keyword){
-                $postsQuery->orWhere('title', 'LIKE', '%'.$keyword.'%')
-                        ->orWhere('tags', 'LIKE','%'.$keyword.'%');
+            foreach ($keywords as $keyword) {
+                $postsQuery->orWhere('title', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('tags', 'LIKE', '%' . $keyword . '%');
             }
             $posts = $postsQuery->where('visibility', 1)
-                                ->orderBy('created_at', 'desc')
-                                ->paginate(20);
+                ->orderBy('created_at', 'desc')
+                ->paginate(20);
 
             /**For meta tags */
             $title = "Search results for {$query}";
             $description = "Browse search results for {$query} on our blog";
-
         } else {
             $posts = collect();
 
@@ -159,15 +158,59 @@ class BlogController extends Controller
         }
 
 
-        SEOTools::setTitle($title,false);
+        SEOTools::setTitle($title, false);
         SEOTools::setDescription($description);
 
         $data = [
-            'pageTitle'=>$title,
-            'query'=>$query,
-            'posts'=>$posts
+            'pageTitle' => $title,
+            'query' => $query,
+            'posts' => $posts
         ];
 
         return view('front.pages.search_posts', $data);
+    }
+    public function readPost(Request $request, $slug = null)
+    {
+        // fetch single post by slug
+        $post = Post::where('slug', $slug)->firstOrFail();
+
+        // Get related posts
+        $relatedPosts = Post::where('category', $post->category)
+            ->where('id', "!=", $post->id)
+            ->where('visibility', 1)
+            ->get();
+
+        // Get next and previous post
+        $nextPost = Post::where('id', '>', $post->id)
+            ->where('visibility', 1)
+            ->orderBy('id', 'asc')
+            ->first();
+
+        // Get next and previous post
+        $prevPost = Post::where('id', '<', $post->id)
+            ->where('visibility', 1)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        // Set SEO Meta Tags
+        $title = $post->title;
+        $description = ($post->meta_description != '') ? $post->meta_description : words($post->content, 35);
+
+        SEOTools::setTitle($title, false);
+        SEOTools::setDescription($description);
+        SEOTools::opengraph()->setUrl(route('read_post', ['slug' => $post->slug]));
+        SEOTools::opengraph()->addProperty('type', 'article');
+        SEOTools::opengraph()->addImage(asset('images/posts' . $post->featured_image));
+        SEOTools::twitter()->setImage(asset('images/posts' . $post->featured_image));
+
+        $data = [
+            'pageTitle' => $title,
+            'post'=>$post,
+            'relatedPosts' => $relatedPosts,
+            'nextPost'=>$nextPost,
+            'prevPost'=>$prevPost
+        ];
+
+        return view('front.pages.single_post', $data);
     }
 }

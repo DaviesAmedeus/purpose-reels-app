@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 //**FRONT-END ROUTES */
 Route::get('/', [BlogController::class, 'index'])->name('home');
-Route::get('/post{slug}', [BlogController::class, 'readPost'])->name('read_post');
+Route::get('/post/{slug}', [BlogController::class, 'readPost'])->name('read_post');
 // displaying all posts associated with the selected category
 Route::get('/posts/category/{slug}', [BlogController::class, 'categoryPosts'])->name('category_posts');
 // displaying all posts with the selected author username
