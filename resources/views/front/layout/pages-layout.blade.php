@@ -5,8 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
     @yield('meta_tags')
-    <link rel="shortcut icon" href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}" type="image/x-icon">
-    <link rel="icon" href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}" type="image/x-icon">
+    <link rel="shortcut icon" href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}"
+        type="image/x-icon">
+    <link rel="icon" href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}"
+        type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('front/plugins/bootstrap/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('front/css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('front/plugins/themify-icons/themify-icons.css') }}">
@@ -23,7 +25,9 @@
 
             <nav class="navbar navbar-expand-lg navbar-white">
                 <a class="navbar-brand" href="/">
-                    <img class="img-fluid" width="150px" src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}" alt="{{ isset(settings()->site_title) ? settings()->site_title : '' }}">
+                    <img class="img-fluid" width="150px"
+                        src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}"
+                        alt="{{ isset(settings()->site_title) ? settings()->site_title : '' }}">
                 </a>
                 <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
                     <i class="ti-menu"></i>
@@ -38,7 +42,7 @@
                             <a class="nav-link" href="about.html">About</a>
                         </li>
 
-                       {!! navigations() !!}
+                        {!! navigations() !!}
                         <li class="nav-item">
                             <a class="nav-link" href="contact.html">Contact</a>
                         </li>
@@ -50,12 +54,41 @@
                         <div class="search-wrapper">
                             <form action="{{ route('search_posts') }}" method="GET" class="h-100">
                                 <input class="search-box pl-4" id="search-query" name="q" type="search"
-                                    placeholder="Andika kupata mafunzo, makala &amp; simulizi mbalimbali..." value="{{ request('q') ? request('q ') : '' }}">
+                                    placeholder="Andika kupata mafunzo, makala &amp; simulizi mbalimbali..."
+                                    value="{{ request('q') ? request('q ') : '' }}">
                             </form>
                             <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
                         </div>
                     </div>
                     <!-- /search -->
+
+                    <!-- user detail + dropdown -->
+                    @auth
+                        <div class="user-details">
+                            <img src="{{ auth()->user()->picture }}" alt="User Avatar">
+                            <div class="user-dropdown">
+                                <a href="{{ route('admin.dashboard') }}">
+                                    <i class="ti-dashboard"></i>Dashboard
+                                </a>
+                                <a href="{{ route('admin.profile') }}">
+                                    <i class="ti-user"></i>Profile
+                                </a>
+                                @if (auth()->user()->type == 'superAdmin')
+                                    <a href="{{ route('admin.settings') }}">
+                                        <i class="ti-settings"></i>Settings
+                                    </a>
+                                @endif
+
+                                <form id="front-logout-form" action="{{ route('admin.logout', ['source'=>'front']) }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                                <a href="javascript:;" onclick="event.preventDefault();document.getElementById('front-logout-form').submit();">
+                                    <i class="ti-power-off"></i>Logout
+                                </a>
+                            </div>
+                        </div>
+                    @endauth
+                    <!-- /user detail + dropdown -->
                 </div>
             </nav>
         </div>
@@ -64,7 +97,7 @@
 
     <section class="section">
         <div class="container">
-           @yield('content')
+            @yield('content')
         </div>
     </section>
 
@@ -73,7 +106,8 @@
             <div class="row justify-content-between">
                 <div class="col-md-3 mb-4">
                     <a class="mb-4 d-block" href="index.html">
-                        <img class="img-fluid" width="150px" src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}"
+                        <img class="img-fluid" width="150px"
+                            src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}"
                             alt="{{ isset(settings()->site_title) ? settings()->site_title : '' }}">
                     </a>
                     <p>{{ isset(settings()->site_meta_description) ? settings()->site_meta_description : '' }}</p>
@@ -125,6 +159,21 @@
     <script src="{{ asset('front/plugins/slick/slick.min.js') }}"></script>
     <script src="{{ asset('extra-assets/ijabo/js/ijabo.min.js') }}"></script>
     <script src="{{ asset('front/js/script.js') }}"></script>
+    <script>
+        // toggle dropdown menu
+        document.querySelector('.user-details').addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+
+        // Close dropdown if user clicks outside
+        document.addEventListener('click', function(e) {
+            const userDetails = document.querySelector('.user-details');
+            if (!userDetails.contains(e.target)) {
+                userDetails.classList.remove('active');
+
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 
