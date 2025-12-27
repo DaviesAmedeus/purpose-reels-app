@@ -155,8 +155,14 @@ class AdminController extends Controller
         ];
 
                     return view('back.pages.categories_page', $data);
+    }
 
+    public function manageSlider(Request $request){
+        $data = [
+            'pageTitle'=> 'Manage Home Slider'
+        ];
 
+        return view('back.pages.slider', $data);
 
     }
 }

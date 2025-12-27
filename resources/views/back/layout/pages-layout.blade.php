@@ -354,6 +354,15 @@
                                 </span>
                             </a>
                         </li>
+
+                         <li>
+                            <a class="dropdown-toggle no-arrow {{ Route::is('admin.slider') ? 'active' : '' }}"
+                                href="{{ route('admin.slider') }}"></span>
+                                <span class="micon dw dw-image"></span>
+                                <span class="mtext">Manage Slider
+                                </span>
+                            </a>
+                        </li>
                     @endif
 
                 </ul>
