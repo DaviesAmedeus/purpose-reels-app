@@ -39,7 +39,7 @@ class Slides extends Component
         $this->validate([
             'slide_heading'=> 'required',
             'slide_link'=>'nullable|url',
-            'slide_image'=>'required|mimes:png,jpg,jpeg,webp |max:2048'
+            'slide_image'=>'required|mimes:png,jpg,jpeg,webp|max:2048'
         ]);
 
         $path = "slides/";
@@ -74,6 +74,6 @@ class Slides extends Component
 
     public function render()
     {
-        return view('livewire.admin.slides');
+        return view('livewire.admin.slides', ['slides'=> Slide::orderBy('ordering', 'asc')->get()]);
     }
 }

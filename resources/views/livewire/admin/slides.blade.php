@@ -35,16 +35,21 @@
                 <th scope="col">Action</th>
             </thead>
             <tbody>
-                <tr>
-                    <td scope="row">#22</td>
+                @forelse ($slides as $slide)
+ <tr>
+                    <td scope="row">{{ $slide->id }}</td>
                     <td>
-                        <a href="#">
-                            <img src="" width="100" alt="">
-                        </a>
+                            <img src="{{ asset('images/slides/'.$slide->image)}}" width="100" alt="" class="img-thumbnail">
                     </td>
-                    <td>Slide Heading</td>
-                    <td>#Link</td>
-                    <td>Status</td>
+                    <td>{{ $slide->heading }}</td>
+                    <td>{{ $slide->link ? $slide->link : ' - ' }}</td>
+                    <td>
+                        @if($slide->status == 1)
+                        <span class="badge badge-pill badge-success">Public</span>
+                        @else
+                        <span class="badge badge-pill badge-secondary">Unlisted</span>
+                        @endif
+                    </td>
                     <td>
                         <div class="table-actions">
                             <a href="#" data-color="#265ed7" style="color: rgb(38, 94, 215)"><i
@@ -56,6 +61,14 @@
                         </div>
                     </td>
                 </tr>
+                @empty
+                    <tr>
+                        <td colspan="6">
+                            <span class="text-danger"> No slide item found!</span>
+                        </td>
+                    </tr>
+                @endforelse
+
             </tbody>
         </table>
     </div>
