@@ -7,34 +7,29 @@
 
     <div class="row">
         <div class="col-lg-8  mb-5 mb-lg-0">
-
             <article class="row mb-5">
-                <div class="col-12">
-                    <div class="post-slider">
-                        <div class="slider-item">
-                            <img loading="lazy" src="{{ asset('front/images/posts/11.png') }}" class="img-fluid"
-                                alt="post-thumb">
-                            <div class="slider-content">
-                                <h2 class="animate__animated">JavaScript ES6: Arrow Functions Explained</h2>
-                            </div>
-                        </div>
-                        <div class="slider-item">
-                            <img loading="lazy" src="{{ asset('front/images/posts/02.png') }}" class="img-fluid"
-                                alt="post-thumb">
-                            <div class="slider-content">
-                                <h2 class="animate__animated">CSS Flexbox: Aligning Elements Like a Pro
-                                </h2>
-                            </div>
-                        </div>
-                        <div class="slider-item">
-                            <img loading="lazy" src="{{ asset('front/images/posts/03.png') }}" class="img-fluid"
-                                alt="post-thumb">
-                            <div class="slider-content">
-                                <h2 class="animate__animated">Optimizing Applications for Speed</h2>
-                            </div>
+
+                @if(!empty(get_slides()))
+                    <div class="col-12">
+                        <div class="post-slider">
+                            @foreach (get_slides() as $slide)
+                                <div class="slider-item">
+                                    <img loading="lazy" src="{{ asset('images/slides/' . $slide->image) }}" class="img-fluid"
+                                        alt="post-thumb">
+                                    <div class="slider-content">
+                                        @if ($slide->link)
+                                            <a href="{{ $slide->link }}">
+                                                <h2 class="animate__animated">{{ $slide->heading }}</h2>
+                                            </a>
+                                        @else
+                                            <h2 class="animate__animated">{{ $slide->heading }}</h2>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-                </div>
+                @endif
 
                 @if (!empty(latest_posts(0, 1)))
                     @foreach (latest_posts(0, 1) as $post)
@@ -128,7 +123,8 @@
                     <ul class="list-unstyled widget-list">
                         <li class="media widget-post align-items-center">
                             <a href="{{ route('read_post', $post->slug) }}">
-                                <img loading="lazy" class="mr-3" src="{{ asset('/images/posts/resized/thumb_'.$item->featured_image) }}">
+                                <img loading="lazy" class="mr-3"
+                                    src="{{ asset('/images/posts/resized/thumb_' . $item->featured_image) }}">
                             </a>
                             <div class="media-body">
                                 <h6 class="mb-0">

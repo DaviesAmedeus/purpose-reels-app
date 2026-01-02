@@ -24,53 +24,60 @@
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-auto table-sm table-condensed">
-            <thead class="bg-secondary text-white">
-                <th scope="col">#ID</th>
-                <th scope="col">Image</th>
-                <th scope="col">Heading</th>
-                <th scope="col">Link</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
-            </thead>
-            <tbody>
-                @forelse ($slides as $slide)
- <tr>
-                    <td scope="row">{{ $slide->id }}</td>
-                    <td>
-                            <img src="{{ asset('images/slides/'.$slide->image)}}" width="100" alt="" class="img-thumbnail">
-                    </td>
-                    <td>{{ $slide->heading }}</td>
-                    <td>{{ $slide->link ? $slide->link : ' - ' }}</td>
-                    <td>
-                        @if($slide->status == 1)
-                        <span class="badge badge-pill badge-success">Public</span>
-                        @else
-                        <span class="badge badge-pill badge-secondary">Unlisted</span>
-                        @endif
-                    </td>
-                    <td>
-                        <div class="table-actions">
-                            <a href="#" data-color="#265ed7" style="color: rgb(38, 94, 215)"><i
-                                    class="icon-copy dw dw-edit2"></i>
-                            </a>
-                            <a href="#" data-color="#e95959" style="color: rgb(233, 89, 89)"><i
-                                    class="icon-copy dw dw-delete-3"></i>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                @empty
+    <div class="card-box pd-20 mb-4">
+        <div class="table-responsive">
+            <table class="table table-striped table-auto table-sm table-condensed">
+                <thead class="bg-secondary text-white">
                     <tr>
-                        <td colspan="6">
-                            <span class="text-danger"> No slide item found!</span>
-                        </td>
+                        <th scope="col">#ID</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Heading</th>
+                        <th scope="col">Link</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
                     </tr>
-                @endforelse
+                </thead>
+                <tbody id="sortable_slides">
+                    @forelse ($slides as $slide)
+                        <tr data-index="{{ $slide->id }}" data-ordering="{{ $slide->ordering }}">
+                            <td scope="row">{{ $slide->id }}</td>
+                            <td>
+                                <img src="{{ asset('images/slides/' . $slide->image) }}" width="100" alt=""
+                                    class="img-thumbnail">
+                            </td>
+                            <td>{{ $slide->heading }}</td>
+                            <td>{{ $slide->link ? $slide->link : ' - ' }}</td>
+                            <td>
+                                @if ($slide->status == 1)
+                                    <span class="badge badge-pill badge-success">Public</span>
+                                @else
+                                    <span class="badge badge-pill badge-secondary">Unlisted</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="javascript:;" data-color="#265ed7"
+                                        wire:click="editSlide({{ $slide->id }})" style="color: rgb(38, 94, 215)"><i
+                                            class="icon-copy dw dw-edit2"></i>
+                                    </a>
+                                    <a href="javascript:;" wire:click="$dispatch('deleteSlide',{id:{{ $slide->id }}})" data-color="#e95959" style="color: rgb(233, 89, 89)"><i
+                                            class="icon-copy dw dw-delete-3"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6">
+                                <span class="text-danger"> No slide item found!</span>
+                            </td>
+                        </tr>
+                    @endforelse
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
     <!--SLIDE MODAL --->
@@ -92,7 +99,8 @@
                     @endif
                     <div class="form-group">
                         <label for=""><b>Heading</b>:</label>
-                        <input type="text" class="form-control" wire:model="slide_heading" placeholder="Enter Slide Heading">
+                        <input type="text" class="form-control" wire:model="slide_heading"
+                            placeholder="Enter Slide Heading">
                         @error('slide_heading')
                             <span class="text-danger ml-1">{{ $message }}</span>
                         @enderror
@@ -100,15 +108,17 @@
 
                     <div class="form-group">
                         <label for=""><b>Link</b>:</label>
-                        <input type="text" class="form-control" wire:model="slide_link" placeholder="Enter Slide Link">
+                        <input type="text" class="form-control" wire:model="slide_link"
+                            placeholder="Enter Slide Link">
                         @error('slide_link')
                             <span class="text-danger ml-1">{{ $message }}</span>
                         @enderror
                     </div>
 
-                    @if ($slide_image)
+                    @if ($selected_slide_image)
                         <div class="d-block" style="max-width: 200px;">
-                            <img src="{{ $slide_image->temporaryUrl() }}" alt="" class="img-thumbnail" style="max-width: 100%;height:auto;">
+                            <img src="{{ $selected_slide_image }}" alt="" class="img-thumbnail"
+                                style="max-width: 100%;height:auto;">
                         </div>
                     @endif
                     <div class="form-group">
@@ -119,8 +129,8 @@
                         @enderror
                     </div>
                     <div class="custom-control custom-checkbox mb-5">
-                        {{-- <input type="check-box" class="custom-control-input" id="customCheck" checked wire:model="slide_status"> --}}
-                        <input type="checkbox" checked class="form-check-input" id="customCheck">
+                        {{-- <input type="checkbox" class="custom-control-input" id="customCheck"  wire:model="slide_status"> --}}
+                        <input type="checkbox" class="form-check-input" id="customCheck" wire:model="slide_status">
                         <label for="customCheck">Visible on Slider</label>
                     </div>
                 </div>

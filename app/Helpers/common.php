@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use App\Models\Post;
+use App\Models\Slide;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Models\GeneralSetting;
@@ -151,8 +152,19 @@ if(!function_exists('sidebar_latest_posts')){
         }
         return $posts->where('visibility',1)
                     ->orderBy('created_at', 'desc')
-                    ->get(); 
+                    ->get();
     }
 }
 
+/** GET HOME SLIDES */
+if(!function_exists('get_slides')){
+    function get_slides($limit=5){
+        
+        return Slide::where('status', 1)
+            ->limit($limit)
+            ->orderBy('ordering','asc')
+            ->get();
+
+    }
+}
 
