@@ -21,6 +21,9 @@ Route::get('/posts/author/{username}', [BlogController::class, 'authorPosts'])->
 Route::get('/posts/tag/{any}', [BlogController::class, 'tagPosts'])->name('tag_posts');
 // displaying search results for posts
 Route::get('/search', [BlogController::class, 'searchPosts'])->name('search_posts');
+Route::get('/contact', [BlogController::class, 'contactPage'])->name('contact');
+// Round for guest user to send email
+Route::post('/contact', [BlogController::class, 'sendEmail'])->name('send_email');
 
 
 //**TESTING ROUTES */

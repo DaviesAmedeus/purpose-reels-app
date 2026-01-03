@@ -5,11 +5,10 @@
 @endsection
 @section('content')
 
-    <div class="row">
-        <div class="col-lg-8  mb-5 mb-lg-0">
-            <article class="row mb-5">
-
-                @if(!empty(get_slides()))
+<div class="row">
+    <div class="col mb-5 mb-lg-0">
+        <article class="row mb-5">
+             @if(!empty(get_slides()))
                     <div class="col-12">
                         <div class="post-slider">
                             @foreach (get_slides() as $slide)
@@ -30,6 +29,36 @@
                         </div>
                     </div>
                 @endif
+        </article>
+
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-lg-8  mb-5 mb-lg-0">
+            <article class="row mb-5">
+
+                {{-- @if(!empty(get_slides()))
+                    <div class="col-12">
+                        <div class="post-slider">
+                            @foreach (get_slides() as $slide)
+                                <div class="slider-item">
+                                    <img loading="lazy" src="{{ asset('images/slides/' . $slide->image) }}" class="img-fluid"
+                                        alt="post-thumb">
+                                    <div class="slider-content">
+                                        @if ($slide->link)
+                                            <a href="{{ $slide->link }}">
+                                                <h2 class="animate__animated">{{ $slide->heading }}</h2>
+                                            </a>
+                                        @else
+                                            <h2 class="animate__animated">{{ $slide->heading }}</h2>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif --}}
 
                 @if (!empty(latest_posts(0, 1)))
                     @foreach (latest_posts(0, 1) as $post)

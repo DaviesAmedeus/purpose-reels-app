@@ -44,7 +44,7 @@
 
                         {!! navigations() !!}
                         <li class="nav-item">
-                            <a class="nav-link" href="contact.html">Contact</a>
+                            <a class="nav-link" href="{{ route('contact') }}">Contact</a>
                         </li>
                     </ul>
 
@@ -105,7 +105,7 @@
         <div class="container">
             <div class="row justify-content-between">
                 <div class="col-md-3 mb-4">
-                    <a class="mb-4 d-block" href="index.html">
+                    <a class="mb-4 d-block" href="/">
                         <img class="img-fluid" width="150px"
                             src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}"
                             alt="{{ isset(settings()->site_title) ? settings()->site_title : '' }}">
