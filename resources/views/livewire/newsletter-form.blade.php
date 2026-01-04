@@ -1,6 +1,5 @@
 <div>
     <form class="subscription" wire:submit="subscribe()" method="post">
-        <x-form-alerts />
         <div class="position-relative">
             <i class="ti-email email-icon"></i>
             <input type="text" wire:model.live="email" class="form-control" placeholder="Your Email Address">

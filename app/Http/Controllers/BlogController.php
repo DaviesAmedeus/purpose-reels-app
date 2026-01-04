@@ -246,15 +246,16 @@ class BlogController extends Controller
         $mail_body = view('email-templates.contact-message-template',$data);
 
         $mail_config = [
-            'from_address'=>$request->email,
             'from_name'=>$request->name,
+            'replyToAddress'=>$request->email,
+            'replyToName'=>$request->name,
             'recipient_address'=>$siteInfo->site_email,
             'recipient_name'=>$siteInfo->site_title,
             'subject'=>$request->subject,
             'body'=>$mail_body
         ];
 
-        if(CMail::send($mail_config)){
+        if(CMail::send($mail_config,true)){
             return redirect()->back()->with('success', 'Email Sent Successfully!');
         }else{
             return redirect()->back()->withInput()->with('fail', 'Something went wrong. Try again later!');

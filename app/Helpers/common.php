@@ -7,18 +7,25 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Models\GeneralSetting;
 use App\Models\ParentCategory;
-
-
+use App\Models\SiteSocialLink;
 
 /*** Site Information */
 if (!function_exists('settings')) {
-
-
     function settings()
     {
         $settings = GeneralSetting::take(1)->first();
         if (!is_null($settings)) {
             return $settings;
+        }
+    }
+}
+
+/** Site social links */
+if(!function_exists('site_social_links')){
+    function site_social_links(){
+        $links = SiteSocialLink::take(1)->first();
+        if(!is_null($links)){
+            return $links;
         }
     }
 }
@@ -159,7 +166,7 @@ if(!function_exists('sidebar_latest_posts')){
 /** GET HOME SLIDES */
 if(!function_exists('get_slides')){
     function get_slides($limit=5){
-        
+
         return Slide::where('status', 1)
             ->limit($limit)
             ->orderBy('ordering','asc')

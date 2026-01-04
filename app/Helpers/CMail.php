@@ -10,7 +10,7 @@ use PHPMailer\PHPMailer\Exception;
 class CMail
 {
 
-    public static function send($config)
+    public static function send($config, $reply=false)
     {
         //Create an instance; passing `true` enables exceptions
         $mail = new PHPMailer(true);
@@ -33,6 +33,13 @@ class CMail
             );
             $mail->addAddress($config['recipient_address'], isset($config['recipient_name']) ? $config['recipient_name'] : null );
 
+            if($reply){
+                $mail->addReplyTo(
+                    isset($config['replyToAddress'])  ? $config['replyToAddress'] : '',
+                     isset($config['replyToName'])  ? $config['replyToName'] : ''
+
+                );
+            }
 
             //Content
             $mail->isHTML(true);

@@ -126,10 +126,15 @@
                 <div class="col-lg-2 col-md-3 col-6 mb-4">
                     <h6 class="mb-4">Social Links</h6>
                     <ul class="list-unstyled footer-list">
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">Github</a></li>
-                        <li><a href="#">Linkedin</a></li>
+                        @if (site_social_links()->facebook_url)
+                        <li><a href="{{ site_social_links()->facebook_url }}" target="_blank">Facebook</a></li>
+                        @endif
+                        @if (site_social_links()->instagram_url)
+                        <li><a href="{{ site_social_links()->instagram_url }}" target="_blank">Instagram</a></li>
+                        @endif
+                         @if (site_social_links()->linkedin_url)
+                        <li><a href="{{ site_social_links()->linkedin_url }}" target="_blank">LinkedIn</a></li>
+                        @endif
                     </ul>
                 </div>
 
