@@ -36,15 +36,15 @@
                 <div class="collapse navbar-collapse text-center" id="navigation">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="/">Home</a>
+                            <a class="nav-link" href="/">Nyumbani</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="about.html">About</a>
+                            <a class="nav-link" href="{{ route('about') }}">Kuhusu</a>
                         </li>
 
                         {!! navigations() !!}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('contact') }}">Contact</a>
+                            <a class="nav-link" href="{{ route('contact') }}">Mawasiliano</a>
                         </li>
                     </ul>
 
@@ -116,10 +116,10 @@
                 <div class="col-lg-2 col-md-3 col-6 mb-4">
                     <h6 class="mb-4">Quick Links</h6>
                     <ul class="list-unstyled footer-list">
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                        <li><a href="terms-conditions.html">Terms Conditions</a></li>
+                        <li><a href="{{ route('contact') }}">Mawasiliano</a></li>
+                        <li><a href="{{ route('about') }}">Kuhusu</a></li>
+                        <li><a href="{{ route('privacy-policy') }}">Sera ya Faragha</a></li>
+                        <li><a href="{{ route('terms-and-conditions') }}">Sheria na Masharti</a></li>
                     </ul>
                 </div>
 
@@ -148,7 +148,7 @@
                 <a href="javascript:void(0);" id="scrollTop"><i class="ti-angle-up"></i></a>
             </div>
             <div class="text-center">
-                <p class="content">&copy; 2024 - Design &amp; Develop By SawaStacks</p>
+                <p class="content"> Purpose Reels &copy; {{ date('Y') }}</p>
             </div>
         </div>
     </footer>

@@ -40,6 +40,34 @@ class BlogController extends Controller
         return view('front.pages.index', $data);
     }
 
+    public function about()
+    {
+        $title = 'Kuhusu Purpose Reels';
+        $description = isset(settings()->site_meta_description) ? settings()->site_meta_description : '';
+        $imgURL = isset(settings()->site_logo) ? asset('/images/site/' . settings()->site_logo) : '';
+        $keywords = isset(settings()->site_meta_keywords) ? settings()->site_meta_keywords : '';
+        $currentUrl = url()->current();
+
+        /**Meta SEO */
+        SEOTools::setTitle($title, false);
+        SEOTools::setDescription($description);
+        SEOMeta::setKeywords($keywords);
+
+        /**Open Graph */
+        SEOTools::opengraph()->setUrl($currentUrl);
+        SEOTools::opengraph()->addImage($imgURL);
+        SEOTools::opengraph()->addProperty('type', 'articles');
+
+        /** Twitter */
+        SEOTools::twitter()->addImage($imgURL);
+        SEOTools::twitter()->setUrl($currentUrl);
+        SEOTools::twitter()->setSite('@purpose_reels');
+
+
+        $data = ['pageTitle' => $title];
+        return view('front.pages.about', $data);
+    }
+
 
     public function categoryPosts(Request $request, $slug = null)
     {
@@ -216,7 +244,7 @@ class BlogController extends Controller
     }
 
     public function contactPage(Request $request){
-        $title = 'Contact us';
+        $title = 'Wasiliana nasi';
         $description = 'Hate Forms? Write Us Email';
         SEOTools::setTitle($title, false);
         SEOTools::setDescription($description);
@@ -260,6 +288,36 @@ class BlogController extends Controller
         }else{
             return redirect()->back()->withInput()->with('fail', 'Something went wrong. Try again later!');
         }
+
+    }
+
+    public function privacyPolicy(){
+
+        $title = 'Sera ya faragha Purpose Reels';
+        $description = 'Sera ya Faragha ya Purpose Reels inaeleza jinsi tunavyokusanya, kutumia, na kulinda taarifa zako binafsi unapoitumia tovuti yetu.';
+
+        /**Set SEO Meta Tags */
+        SEOTools::setTitle($title, false);
+        SEOTools::setDescription($description);
+        SEOTools::opengraph()->setUrl(url()->current());
+
+                return view('front.pages.privacy-policy');
+
+
+    }
+
+    public function termsAndConditions(){
+
+        $title = 'Sheria na Masharti';
+        $description = 'Sheria na Masharti ya Purpose Reels yanaeleza matumizi ya tovuti, haki za maudhui, na wajibu wa watumiaji wetu.';
+
+        /**Set SEO Meta Tags */
+        SEOTools::setTitle($title, false);
+        SEOTools::setDescription($description);
+        SEOTools::opengraph()->setUrl(url()->current());
+
+                return view('front.pages.terms-and-conditions');
+
 
     }
 }
