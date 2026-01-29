@@ -1,5 +1,4 @@
 @extends('front.layout.pages-layout')
-{{-- @section('pageTitle', isset($pageTitle) ? $pageTitle : 'Document title') --}}
 @section('meta_tags')
     {!! SEO::generate() !!}
 @endsection
@@ -27,7 +26,7 @@
                     @endif
                 </ul>
             </div>
-            <img src="./images/posts/10.png" class="img-fluid w-100 mb-4 rounded-lg" alt="author">
+            <img src="{{ asset('images/site/PRGIF.gif') }}" class="img-fluid w-100 mb-4 rounded-lg" alt="author">
             <div class="content">
                 <p>Purpose Reels ni jukwaa la ubunifu linalotumia nguvu ya filamu kusimulia hadithi zenye maana na kutoa
                     mafunzo ya maisha yanayochochea ukuaji binafsi, tafakari, na kuishi kwa kusudi. Purpose Reels huangazia
